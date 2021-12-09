@@ -1,4 +1,4 @@
-from rest_framework.generics import ListAPIView
+from rest_framework.generics import ListCreateAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
@@ -8,9 +8,16 @@ from .serializers import ContactSerializer
 
 # Create your views here.
 
-class ContactsView(ListAPIView):
+class ContactsView(ListCreateAPIView):
     serializer_class = ContactSerializer
     queryset = Contacts.objects.all()
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.serializer_class(data=request.data, many=False)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(status=status.HTTP_400_BAD_REQUEST)
 
 class ContactView(APIView):
     def get(self, request, contact_id):
