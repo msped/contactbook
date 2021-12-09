@@ -16,3 +16,13 @@ class ContactView(APIView):
         contact = Contacts.objects.get(id=contact_id)
         serializer = ContactSerializer(contact)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def delete(self, request, contact_id):
+        contact = Contacts.objects.get(id=contact_id)
+        if contact:
+            contact.delete()
+            return Response(
+                {f'Contact {contact.name} has been deleted'},
+                status=status.HTTP_200_OK
+            )
+        return Response(contact.errors, status=status.HTTP_400_BAD_REQUEST)
