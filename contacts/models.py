@@ -6,7 +6,7 @@ from phonenumber_field.modelfields import PhoneNumberField
 class Contacts(models.Model):
     name = models.CharField(max_length=50)
     email = models.EmailField()
-    phoneNumber = PhoneNumberField(blank=False, null=False, unique=True, max_length=11)
+    phoneNumber = PhoneNumberField(blank=False, null=False, unique=True)
 
     class Meta:
         ordering = ['name']
