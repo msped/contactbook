@@ -8,8 +8,5 @@ class Contacts(models.Model):
     email = models.EmailField()
     phoneNumber = PhoneNumberField(blank=False, null=False, unique=True)
 
-    class Meta:
-        ordering = ['name']
-
     def __str__(self):
         return self.name
