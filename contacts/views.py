@@ -35,10 +35,8 @@ class ContactView(APIView):
 
     def delete(self, request, contact_id):
         contact = get_object_or_404(Contacts, id=contact_id)
-        if contact:
-            contact.delete()
-            return Response(
-                {f'Contact {contact.name} has been deleted'},
-                status=status.HTTP_200_OK
-            )
-        return Response({"This contact does not exist."}, status=status.HTTP_404_NOT_FOUND)
+        contact.delete()
+        return Response(
+            {f'Contact {contact.name} has been deleted'},
+            status=status.HTTP_200_OK
+        )
