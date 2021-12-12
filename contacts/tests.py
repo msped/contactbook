@@ -85,7 +85,7 @@ class ContactBookViewsTestCase(APITestCase):
         self.assertEqual(
             {
                 "id": 1,
-                "profile_picture": "/media/profile_pictures/default.jpg",
+                "profile_picture": "http://testserver/media/profile_pictures/default.jpg",
                 "name": "Matt Edwards",
                 "email": "matt@mspe.me",
                 "phoneNumber": "+447943337410"
@@ -167,7 +167,7 @@ class ContactBookViewsTestCase(APITestCase):
             json.loads(response.content),
             {
                 "id": 1,
-                "profile_picture": "/media/profile_pictures/test_2.png",
+                "profile_picture": "http://testserver/media/profile_pictures/test_2.png",
                 "name": "Matthew Edwards",
                 "email": "matt@mspe.me",
                 "phoneNumber": "+447943337410"
@@ -176,11 +176,7 @@ class ContactBookViewsTestCase(APITestCase):
 
     def delete_contact(self):
         response = self.client.delete('/api/contacts/2')
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(
-            json.loads(response.content),
-            ["Contact John Doe has been deleted"]
-        )
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
     def test_in_order(self):
         self.create_new_contact_default_image()
