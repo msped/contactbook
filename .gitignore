@@ -1,2 +1,6 @@
 venv/
 *.pyc
+.vscode/
+db.sqlite3
+htmlcov/
+.coverage
