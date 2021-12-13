@@ -1,6 +1,15 @@
 from django.contrib import admin
-from .models import Contacts
+from .models import Contacts, PhoneNumbers, Emails
 
 # Register your models here.
 
-admin.site.register(Contacts)
+class EmailInline(admin.TabularInline):
+    model = Emails
+
+class PhoneNumberInline(admin.TabularInline):
+    model = PhoneNumbers
+
+class ContactAdmin(admin.ModelAdmin):
+    inlines = [PhoneNumberInline, EmailInline,]
+
+admin.site.register(Contacts, ContactAdmin)
