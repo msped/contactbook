@@ -27,9 +27,6 @@ class PhoneNumbers(models.Model):
     def __str__(self):
         return f'{self.contact.name}: {self.phonenumber_type} - {self.phoneNumber}'
 
-    # def clean(self):
-    #     home = PhoneNumbers.objects.get(contact=self.contact, contact_type='')
-
 class Emails(models.Model):
 
     class Options(models.TextChoices):
