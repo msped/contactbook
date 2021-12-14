@@ -2,8 +2,8 @@ from rest_framework.generics import ListCreateAPIView
 from rest_framework.response import Response
 from rest_framework.generics import RetrieveUpdateDestroyAPIView
 from rest_framework import status
-from .models import Contacts, PhoneNumbers
-from .serializers import ContactSerializer, PhoneNumberSerializer
+from .models import Contacts, PhoneNumbers, Emails
+from .serializers import ContactSerializer, EmailSerializer, PhoneNumberSerializer
 
 # Create your views here.
 
@@ -33,3 +33,11 @@ class UpdatePhoneNumber(RetrieveUpdateDestroyAPIView):
 
     def get_queryset(self):
         return PhoneNumbers.objects.all()
+
+class UpdateEmail(RetrieveUpdateDestroyAPIView):
+    serializer_class = EmailSerializer
+    lookup_url_kwarg = "email_id"
+    lookup_field = "id"
+
+    def get_queryset(self):
+        return Emails.objects.all()
