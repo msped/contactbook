@@ -22,7 +22,7 @@ class PhoneNumbers(models.Model):
 
     contact = models.ForeignKey(Contacts, on_delete=models.CASCADE, related_name="phone_number")
     phonenumber_type = models.CharField(max_length=4, choices=Options.choices, default='1')
-    phoneNumber = PhoneNumberField(blank=False, null=False, unique=True)
+    phoneNumber = PhoneNumberField(blank=False, null=False)
 
     def __str__(self):
         return f'{self.contact.name}: {self.phonenumber_type} - {self.phoneNumber}'
