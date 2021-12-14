@@ -2,8 +2,8 @@ from rest_framework.generics import ListCreateAPIView
 from rest_framework.response import Response
 from rest_framework.generics import RetrieveUpdateDestroyAPIView
 from rest_framework import status
-from .models import Contacts
-from .serializers import ContactSerializer
+from .models import Contacts, PhoneNumbers
+from .serializers import ContactSerializer, PhoneNumberSerializer
 
 # Create your views here.
 
@@ -25,3 +25,11 @@ class ContactView(RetrieveUpdateDestroyAPIView):
 
     def get_queryset(self):
         return Contacts.objects.all()
+
+class UpdatePhoneNumber(RetrieveUpdateDestroyAPIView):
+    serializer_class = PhoneNumberSerializer
+    lookup_url_kwarg = "phone_number_id"
+    lookup_field = "id"
+
+    def get_queryset(self):
+        return PhoneNumbers.objects.all()
