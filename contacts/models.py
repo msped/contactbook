@@ -25,7 +25,7 @@ class PhoneNumbers(models.Model):
     phoneNumber = PhoneNumberField(blank=False, null=False)
 
     def __str__(self):
-        return f'{self.contact.name}: {self.phonenumber_type} - {self.phoneNumber}'
+        return f'{self.contact.name}: {self.get_phonenumber_type_display()} - {self.phoneNumber}'
 
 class Emails(models.Model):
 
@@ -38,4 +38,4 @@ class Emails(models.Model):
     email = models.EmailField(null=False, blank=False)
 
     def __str__(self):
-        return f'{self.contact.name}: {self.email_type} - {self.email}'
+        return f'{self.contact.name}: {self.get_email_type_display()} - {self.email}'
