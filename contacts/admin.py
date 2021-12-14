@@ -13,3 +13,5 @@ class ContactAdmin(admin.ModelAdmin):
     inlines = [PhoneNumberInline, EmailInline,]
 
 admin.site.register(Contacts, ContactAdmin)
+admin.site.register(PhoneNumbers)
+admin.site.register(Emails)
