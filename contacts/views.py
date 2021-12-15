@@ -3,12 +3,13 @@ from rest_framework.response import Response
 from rest_framework.generics import RetrieveUpdateDestroyAPIView
 from rest_framework import status
 from .models import Contacts, PhoneNumbers, Emails
-from .serializers import ContactSerializer, EmailSerializer, PhoneNumberSerializer
+from .serializers import ContactsSerializer, EmailSerializer, PhoneNumberSerializer
 
 # Create your views here.
 
-class ContactsView(ListCreateAPIView):
-    serializer_class = ContactSerializer
+class CreateListContactView(ListCreateAPIView):
+    """Create a contact or list all contacts"""
+    serializer_class = ContactsSerializer
     queryset = Contacts.objects.all()
 
     def create(self, request, *args, **kwargs):
