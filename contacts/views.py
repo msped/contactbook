@@ -1,9 +1,12 @@
-from rest_framework.generics import ListCreateAPIView
-from rest_framework.response import Response
-from rest_framework.generics import RetrieveUpdateDestroyAPIView
 from rest_framework import status
-from .models import Contacts, PhoneNumbers, Emails
-from .serializers import ContactsSerializer, EmailSerializer, PhoneNumberSerializer
+from rest_framework.generics import (DestroyAPIView, ListCreateAPIView,
+                                     RetrieveUpdateDestroyAPIView, get_object_or_404)
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
+from .models import Contacts, Emails, PhoneNumbers
+from .serializers import (ContactDetailSerializer, ContactsSerializer,
+                          EmailSerializer, PhoneNumberSerializer)
 
 # Create your views here.
 
@@ -19,13 +22,17 @@ class CreateListContactView(ListCreateAPIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-class ContactView(RetrieveUpdateDestroyAPIView):
-    serializer_class = ContactSerializer
-    lookup_url_kwarg = "contact_id"
-    lookup_field = "id"
+class ContactDetailView(APIView):
+    """Get detailed contact or delete"""
+    def get(self, contact_id):
+        contact = get_object_or_404(Contacts, id=contact_id)
+        serializer = ContactDetailSerializer(contact, many=False)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
-    def get_queryset(self):
-        return Contacts.objects.all()
+    def delete(self, contact_id):
+        contact = get_object_or_404(Contacts, id=contact_id)
+        contact.delete()
+        return Response(f"Contact {contact.name} deleted.", status=status.HTTP_200_OK)
 
 class UpdatePhoneNumber(RetrieveUpdateDestroyAPIView):
     serializer_class = PhoneNumberSerializer
