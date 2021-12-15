@@ -1,9 +1,12 @@
 from django.urls import path
-from .views import ContactsView, ContactView, UpdatePhoneNumber, UpdateEmail
+
+from .views import (ContactDetailView, CreateListContactView, UpdateEmail,
+                    UpdatePhoneNumber)
 
 urlpatterns = [
-    path('', ContactsView.as_view(), name="contacts_view"),
-    path('<int:contact_id>', ContactView.as_view(), name="contact_view"),
+    path('', CreateListContactView.as_view(), name="contacts"),
+    path('<int:contact_id>', ContactDetailView.as_view(), name="contact_detail"),
+
     path(
         'phone-number/<int:phone_number_id>',
         UpdatePhoneNumber.as_view(),
