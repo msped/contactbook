@@ -58,3 +58,11 @@ class UpdateContactName(UpdateAPIView):
 
     def get_queryset(self):
         return Contacts.objects.all()
+
+class UpdateProfilePicutre(UpdateAPIView):
+    serializer_class = ProfilePictureSerializer
+    lookup_url_kwarg = "contact_id"
+    lookup_field = "id"
+
+    def get_queryset(self):
+        return Contacts.objects.all()
