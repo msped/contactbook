@@ -1,7 +1,7 @@
 from django.urls import path
 
 from .views import (ContactDetailView, CreateListContactView, UpdateEmail,
-                    UpdatePhoneNumber, UpdateContactName)
+                    UpdatePhoneNumber, UpdateContactName, UpdateProfilePicutre)
 
 urlpatterns = [
     path('', CreateListContactView.as_view(), name="contacts"),
@@ -18,4 +18,9 @@ urlpatterns = [
         name="update_email"
     ),
     path('name/<int:contact_id>', UpdateContactName.as_view(), name="update_contact_name"),
+    path(
+        'profile-picture/<int:contact_id>',
+        UpdateProfilePicutre.as_view(),
+        name="update_profile_picture"
+    ),
 ]
