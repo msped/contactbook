@@ -8,7 +8,7 @@ from PIL import Image
 from rest_framework import status
 from rest_framework.test import APITestCase
 
-from .models import Contacts
+from .models import Contacts, Emails, PhoneNumbers
 
 MEDIA_ROOT = tempfile.mkdtemp()
 
@@ -18,9 +18,18 @@ class ContactBookViewsTestCase(APITestCase):
     def setUp(self):
         """Set up database with prepopulated data"""
         Contacts.objects.create(
-            name="Matt Edwards",
-            email="matt@mspe.me",
-            phoneNumber="+447943337410"
+            name="Matt Edwards"
+        )
+        contact = Contacts.objects.get(id=1)
+        PhoneNumbers.objects.create(
+            contact=contact,
+            phonenumber_type= "1",
+            phoneNumber= "+447964974125"
+        )
+        Emails.objects.create(
+            contact=contact,
+            email_type="1",
+            email='matt@mspe.me'
         )
 
     @classmethod
@@ -40,9 +49,7 @@ class ContactBookViewsTestCase(APITestCase):
         response = self.client.post(
             '/api/contacts/',
             {
-                "name": "John Doe",
-                "email": "john.doe@test.me",
-                "phoneNumber": "+447968461978"
+                "name": "John Doe"
             }
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -52,8 +59,6 @@ class ContactBookViewsTestCase(APITestCase):
                 "id": 2,
                 "profile_picture": "/media/profile_pictures/default.jpg",
                 "name": "John Doe",
-                "email": "john.doe@test.me",
-                "phoneNumber": "+447968461978"
             }
         )
 
@@ -63,9 +68,7 @@ class ContactBookViewsTestCase(APITestCase):
             '/api/contacts/',
             {
                 "profile_picture": photo_file,
-                "name": "Jane Doe",
-                "email": "jane.doe@test.me",
-                "phoneNumber": "+447968456978"
+                "name": "Jane Doe"
             }
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -74,9 +77,7 @@ class ContactBookViewsTestCase(APITestCase):
             {
                 "id": 3,
                 "profile_picture": "/media/profile_pictures/test_1.png",
-                "name": "Jane Doe",
-                "email": "jane.doe@test.me",
-                "phoneNumber": "+447968456978"
+                "name": "Jane Doe"
             }
         )
 
@@ -85,10 +86,22 @@ class ContactBookViewsTestCase(APITestCase):
         self.assertEqual(
             {
                 "id": 1,
-                "profile_picture": "http://testserver/media/profile_pictures/default.jpg",
+                "profile_picture": "/media/profile_pictures/default.jpg",
                 "name": "Matt Edwards",
-                "email": "matt@mspe.me",
-                "phoneNumber": "+447943337410"
+                "phone_number": [
+                    {
+                        "id": 1,
+                        "phonenumber_type": "1",
+                        "phoneNumber": "+447964974125"
+                    }
+                ],
+                "email": [
+                    {
+                        "id": 1,
+                        "email_type": "1",
+                        "email": "matt@mspe.me"
+                    }
+                ]
             },
             json.loads(response.content)
         )
@@ -104,24 +117,6 @@ class ContactBookViewsTestCase(APITestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
-    def contact_with_existing_phonenumber(self):
-        response = self.client.post(
-            '/api/contacts/',
-            {
-                "name": "Dave Smith",
-                "email": "dave.smith@gmail.com",
-                "phoneNumber": "+447943337410"
-            }
-        )
-        self.assertEqual(
-            json.loads(response.content),
-            {
-                "phoneNumber": [
-                    "contacts with this phoneNumber already exists."
-                ]
-            }
-        )
-
     def list_all_contacts(self):
         response = self.client.get('/api/contacts/')
         self.assertEqual(
@@ -130,62 +125,31 @@ class ContactBookViewsTestCase(APITestCase):
                 {
                     "id": 1,
                     "profile_picture": "http://testserver/media/profile_pictures/default.jpg",
-                    "name": "Matt Edwards",
-                    "email": "matt@mspe.me",
-                    "phoneNumber": "+447943337410"
+                    "name": "Matt Edwards"
                 },
                 {
                     "id": 2,
                     "profile_picture": "http://testserver/media/profile_pictures/default.jpg",
-                    "name": "John Doe",
-                    "email": "john.doe@test.me",
-                    "phoneNumber": "+447968461978"
+                    "name": "John Doe"
                 },
                 {
                     "id": 3,
                     "profile_picture": "http://testserver/media/profile_pictures/test_1.png",
-                    "name": "Jane Doe",
-                    "email": "jane.doe@test.me",
-                    "phoneNumber": "+447968456978"
+                    "name": "Jane Doe"
                 }
             ]
         )
 
-    def update_contact(self):
-        photo_file = self.generate_photo_file(file_name="test_2")
-        response = self.client.put(
-            '/api/contacts/1',
-            {
-                "profile_picture": photo_file,
-                "name": "Matthew Edwards",
-                "email": "matt@mspe.me",
-                "phoneNumber": "+447943337410"
-            }
-        )
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(
-            json.loads(response.content),
-            {
-                "id": 1,
-                "profile_picture": "http://testserver/media/profile_pictures/test_2.png",
-                "name": "Matthew Edwards",
-                "email": "matt@mspe.me",
-                "phoneNumber": "+447943337410"
-            }
-        )
-
     def delete_contact(self):
         response = self.client.delete('/api/contacts/2')
-        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_in_order(self):
         self.create_new_contact_default_image()
         self.create_new_contact_with_image()
         self.request_contact_that_exists()
         self.request_contact_that_doesnt_exist()
-        self.contact_with_existing_phonenumber()
         self.list_all_contacts()
-        self.update_contact()
         self.delete_contact()
 
 class ContactBookModelsTestCase(APITestCase):
@@ -194,23 +158,65 @@ class ContactBookModelsTestCase(APITestCase):
         """Set up database with prepopulated data"""
         Contacts.objects.create(
             name="Matt Edwards",
-            email="matt@mspe.me",
-            phoneNumber="+447943337410"
         )
 
-    def test_str(self):
+    def generate_photo_file(self, file_name):
+        file = io.BytesIO()
+        image = Image.new('RGBA', size=(100, 100), color=(155, 0, 0))
+        image.save(file, 'png')
+        file.name = f'{file_name}.png'
+        file.seek(0)
+        return file
+
+    def test_contact_str(self):
         contact = Contacts.objects.get(id=1)
         self.assertEqual(str(contact), "Matt Edwards")
 
-    def test_create_record(self):
+    def test_create_contact_without_image(self):
         contact = Contacts(
             name="John Doe",
-            email="john.doe@test.me",
-            phoneNumber="+447965197492"
         )
         contact.save()
 
         self.assertEqual(contact.profile_picture.url, "/media/profile_pictures/default.jpg")
         self.assertEqual(contact.name, "John Doe")
-        self.assertEqual(contact.email, "john.doe@test.me")
-        self.assertEqual(contact.phoneNumber, "+447965197492")
+
+    def create_phonenumber(self):
+        contact = Contacts.objects.get(name="Matt Edwards")
+        phone_number = PhoneNumbers(
+            contact=contact,
+            phonenumber_type='1',
+            phoneNumber="+44796411359"
+        )
+        phone_number.save()
+
+        self.assertEqual(phone_number.contact.name, "Matt Edwards")
+        self.assertEqual(phone_number.phonenumber_type, "1")
+        self.assertEqual(phone_number.phoneNumber, "+44796411359")
+
+    def phonenumber_str(self):
+        phonenumber = PhoneNumbers.objects.get(id=1)
+        self.assertEqual(str(phonenumber), "Matt Edwards: Home - +44796411359")
+
+    def create_email(self):
+        contact = Contacts.objects.get(name="Matt Edwards")
+        email = Emails(
+            contact=contact,
+            email_type='2',
+            email="matt@mspe.me"
+        )
+        email.save()
+
+        self.assertEqual(email.contact.name, "Matt Edwards")
+        self.assertEqual(email.email_type, "2")
+        self.assertEqual(email.email, "matt@mspe.me")
+
+    def email_str(self):
+        email = Emails.objects.get(id=1)
+        self.assertEqual(str(email), "Matt Edwards: Work - matt@mspe.me")
+
+    def test_in_order(self):
+        self.create_phonenumber()
+        self.phonenumber_str()
+        self.create_email()
+        self.email_str()
