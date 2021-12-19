@@ -140,17 +140,95 @@ class ContactBookViewsTestCase(APITestCase):
             ]
         )
 
-    def delete_contact(self):
+    def update_contact_name(self):
+        response = self.client.put(
+            '/api/contacts/name/1',
+            {"name": "Matthew Edwards"}
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(
+            json.loads(response.content),
+            {
+                "id": 1,
+                "name": "Matthew Edwards"
+            }
+        )
+
+    def update_phone_number(self):
+        response = self.client.put(
+            '/api/contacts/phone-number/1',
+            {
+                "phonenumber_type": "2",
+                "phoneNumber": "+447936792548"
+            }
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(
+            json.loads(response.content),
+            {
+                "id": 1,
+                "phonenumber_type": "2",
+                "phoneNumber": "+447936792548"
+            }
+        )
+
+    def update_email(self):
+        response = self.client.put(
+            '/api/contacts/email/1',
+            {
+                "email_type": "1",
+                "email": "matthew@mspe.me"
+            }
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(
+            json.loads(response.content),
+            {
+                "id": 1,
+                "email_type": "1",
+                "email": "matthew@mspe.me"
+            }
+        )
+
+    def delete_contact_with_default_image(self):
+        """default.jpg should not be deleted"""
         response = self.client.delete('/api/contacts/2')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
+    def delete_phone_number(self):
+        response = self.client.delete(
+            '/api/contacts/phone-number/1'
+        )
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
+    def delete_email(self):
+        response = self.client.delete(
+            '/api/contacts/email/1'
+        )
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
     def test_in_order(self):
+        # Create
         self.create_new_contact_default_image()
         self.create_new_contact_with_image()
+        # self.create_new_phone_number()
+        # self.create_new_email()
+
+        # Request
         self.request_contact_that_exists()
         self.request_contact_that_doesnt_exist()
         self.list_all_contacts()
-        self.delete_contact()
+
+        # Update
+        self.update_contact_name()
+        self.update_phone_number()
+        self.update_email()
+        # self.update_profile_picture()
+
+        # Delete
+        self.delete_contact_with_default_image()
+        self.delete_phone_number()
+        self.delete_email()
 
 class ContactBookModelsTestCase(APITestCase):
 
