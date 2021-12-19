@@ -1,13 +1,13 @@
 from rest_framework import status
-from rest_framework.generics import (ListCreateAPIView,
-                                     RetrieveUpdateDestroyAPIView, UpdateAPIView, get_object_or_404)
+from rest_framework.generics import (ListCreateAPIView, RetrieveUpdateDestroyAPIView, UpdateAPIView,
+                                     get_object_or_404)
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from .models import Contacts, Emails, PhoneNumbers
-from .serializers import (ContactDetailSerializer, ContactsSerializer,
-                          EmailSerializer, PhoneNumberSerializer,
-                          ProfilePictureSerializer, ContactNameSerializer)
+from .serializers import (ContactDetailSerializer, ContactNameSerializer,
+                          ContactsSerializer, EmailSerializer,
+                          PhoneNumberSerializer, ProfilePictureSerializer)
 
 # Create your views here.
 
@@ -35,13 +35,31 @@ class ContactDetailView(APIView):
         contact.delete()
         return Response(f"Contact {contact.name} deleted.", status=status.HTTP_200_OK)
 
-class UpdatePhoneNumber(RetrieveUpdateDestroyAPIView):
+class UpdatePhoneNumber(APIView):
     serializer_class = PhoneNumberSerializer
-    lookup_url_kwarg = "phone_number_id"
-    lookup_field = "id"
 
-    def get_queryset(self):
-        return PhoneNumbers.objects.all()
+    def post(self, request):
+        serializer = self.serializer_class(data=request.data, many=False)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)    
+
+    def put(self, request, phone_number_id):
+        number = get_object_or_404(PhoneNumbers, id=phone_number_id)
+        serializer = self.serializer_class(number, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, phone_number_id):
+        number = get_object_or_404(PhoneNumbers, id=phone_number_id)
+        number.delete()
+        return Response(
+            f"Phone number {number.phoneNumber} has been deleted.",
+            status=status.HTTP_204_NO_CONTENT
+        )
 
 class UpdateEmail(RetrieveUpdateDestroyAPIView):
     serializer_class = EmailSerializer
