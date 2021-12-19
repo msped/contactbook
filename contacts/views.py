@@ -38,10 +38,11 @@ class ContactDetailView(APIView):
 class UpdatePhoneNumber(APIView):
     serializer_class = PhoneNumberSerializer
 
-    def post(self, request):
+    def post(self, request, phone_number_id):
+        contact = get_object_or_404(Contacts, id=phone_number_id)
         serializer = self.serializer_class(data=request.data, many=False)
         if serializer.is_valid():
-            serializer.save()
+            serializer.save(contact=contact)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)    
 
@@ -64,10 +65,11 @@ class UpdatePhoneNumber(APIView):
 class UpdateEmail(APIView):
     serializer_class = EmailSerializer
 
-    def post(self, request):
+    def post(self, request, email_id):
+        contact = get_object_or_404(Contacts, id=email_id)
         serializer = self.serializer_class(data=request.data, many=False)
         if serializer.is_valid():
-            serializer.save()
+            serializer.save(contact=contact)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)    
 
