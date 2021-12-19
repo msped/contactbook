@@ -26,7 +26,7 @@ class CreateListContactView(ListCreateAPIView):
 class ContactDetailView(APIView):
     """Get detailed contact or delete"""
     def get(self, request, contact_id):
-        contact = Contacts.objects.get(id=contact_id)
+        contact = get_object_or_404(Contacts, id=contact_id)
         serializer = ContactDetailSerializer(contact, many=False)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
