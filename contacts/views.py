@@ -1,5 +1,5 @@
 from rest_framework import status
-from rest_framework.generics import (ListCreateAPIView, RetrieveUpdateDestroyAPIView, UpdateAPIView,
+from rest_framework.generics import (ListCreateAPIView, UpdateAPIView,
                                      get_object_or_404)
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -61,13 +61,31 @@ class UpdatePhoneNumber(APIView):
             status=status.HTTP_204_NO_CONTENT
         )
 
-class UpdateEmail(RetrieveUpdateDestroyAPIView):
+class UpdateEmail(APIView):
     serializer_class = EmailSerializer
-    lookup_url_kwarg = "email_id"
-    lookup_field = "id"
 
-    def get_queryset(self):
-        return Emails.objects.all()
+    def post(self, request):
+        serializer = self.serializer_class(data=request.data, many=False)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)    
+
+    def put(self, request, email_id):
+        email = get_object_or_404(Emails, id=email_id)
+        serializer = self.serializer_class(email, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, email_id):
+        email = get_object_or_404(Emails, id=email_id)
+        email.delete()
+        return Response(
+            f"Email {email.email} has been deleted.",
+            status=status.HTTP_204_NO_CONTENT
+        )
 
 class UpdateContactName(UpdateAPIView):
     serializer_class = ContactNameSerializer
