@@ -1,5 +1,5 @@
 from rest_framework import status
-from rest_framework.generics import (ListCreateAPIView, UpdateAPIView,
+from rest_framework.generics import (CreateAPIView, ListCreateAPIView, UpdateAPIView,
                                      get_object_or_404)
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -35,16 +35,14 @@ class ContactDetailView(APIView):
         contact.delete()
         return Response(f"Contact {contact.name} deleted.", status=status.HTTP_200_OK)
 
-class UpdatePhoneNumber(APIView):
+class CreatePhoneNumber(CreateAPIView):
     serializer_class = PhoneNumberSerializer
 
-    def post(self, request, phone_number_id):
-        contact = get_object_or_404(Contacts, id=phone_number_id)
-        serializer = self.serializer_class(data=request.data, many=False)
-        if serializer.is_valid():
-            serializer.save(contact=contact)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)    
+class CreateEmail(CreateAPIView):
+    serializer_class = EmailSerializer
+
+class UpdatePhoneNumber(APIView):
+    serializer_class = PhoneNumberSerializer
 
     def put(self, request, phone_number_id):
         number = get_object_or_404(PhoneNumbers, id=phone_number_id)
@@ -64,14 +62,6 @@ class UpdatePhoneNumber(APIView):
 
 class UpdateEmail(APIView):
     serializer_class = EmailSerializer
-
-    def post(self, request, email_id):
-        contact = get_object_or_404(Contacts, id=email_id)
-        serializer = self.serializer_class(data=request.data, many=False)
-        if serializer.is_valid():
-            serializer.save(contact=contact)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)    
 
     def put(self, request, email_id):
         email = get_object_or_404(Emails, id=email_id)
