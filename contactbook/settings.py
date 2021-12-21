@@ -41,7 +41,9 @@ INSTALLED_APPS = [
 
     'rest_framework',
     'phonenumber_field',
-    'contacts.apps.ContactsConfig',
+    'contacts',
+
+    'django_cleanup.apps.CleanupConfig',
 ]
 
 MIDDLEWARE = [

@@ -5,6 +5,7 @@ charset-normalizer==2.0.9
 colorama==0.4.4
 coverage==6.2
 Django==3.2.10
+django-cleanup==5.2.0
 django-phonenumber-field==6.0.0
 djangorestframework==3.12.4
 idna==3.3
