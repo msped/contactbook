@@ -16,9 +16,9 @@ class Contacts(models.Model):
 class PhoneNumbers(models.Model):
 
     class Options(models.TextChoices):
-        HOME = '1', 'Home'
-        MOBILE = '2', 'Mobile'
-        WORK = '3', 'Work'
+        HOME = 'home', 'Home'
+        MOBILE = 'mob', 'Mobile'
+        WORK = 'work', 'Work'
 
     contact = models.ForeignKey(Contacts, on_delete=models.CASCADE, related_name="phone_number")
     phonenumber_type = models.CharField(max_length=4, choices=Options.choices, default='1')
@@ -30,8 +30,8 @@ class PhoneNumbers(models.Model):
 class Emails(models.Model):
 
     class Options(models.TextChoices):
-        HOME = '1', 'Personal'
-        WORK = '2', 'Work'
+        HOME = 'pers', 'Personal'
+        WORK = 'work', 'Work'
 
     contact = models.ForeignKey(Contacts, on_delete=models.CASCADE, related_name="email")
     email_type = models.CharField(max_length=4, choices=Options.choices, default='1')
