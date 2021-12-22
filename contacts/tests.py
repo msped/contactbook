@@ -81,6 +81,76 @@ class ContactBookViewsTestCase(APITestCase):
             }
         )
 
+    def create_new_phone_number(self):
+        response = self.client.post(
+            '/api/contacts/phone-number',
+            {
+                "contact": 1,
+                "phonenumber_type": "2",
+                "phoneNumber": "+447936498745"
+            }
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(
+            json.loads(response.content),
+            {
+                "id": 2,
+                "contact": 1,
+                "phonenumber_type": "2",
+                "phoneNumber": "+447936498745"
+            }
+        )
+
+    def create_new_email(self):
+        response = self.client.post(
+            '/api/contacts/email',
+            {
+                "contact": 1,
+                "email_type": "2",
+                "email": "test@mspe.me"
+            }
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(
+            json.loads(response.content),
+            {
+                "id": 2,
+                "contact": 1,
+                "email_type": "2",
+                "email": "test@mspe.me"
+            }
+        )
+
+    def create_phone_number_that_already_exists(self):
+        response = self.client.post(
+            '/api/contacts/phone-number',
+            {
+                "contact": 1,
+                "phonenumber_type": "2",
+                "phoneNumber": "+447964974125"
+            }
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(
+            json.loads(response.content),
+            {'non_field_errors': ['Contact with the phone number +447964974125 already exists.']}
+        )
+
+    def create_email_that_already_exists(self):
+        response = self.client.post(
+            '/api/contacts/email',
+            {
+                "contact": 1,
+                "email_type": "2",
+                "email": "matt@mspe.me"
+            }
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(
+            json.loads(response.content),
+            {'non_field_errors': ['Contact with the email matt@mspe.me already exists.']}
+        )
+
     def request_contact_that_exists(self):
         response = self.client.get('/api/contacts/1')
         self.assertEqual(
@@ -91,6 +161,7 @@ class ContactBookViewsTestCase(APITestCase):
                 "phone_number": [
                     {
                         "id": 1,
+                        "contact": 1,
                         "phonenumber_type": "1",
                         "phoneNumber": "+447964974125"
                     }
@@ -98,6 +169,7 @@ class ContactBookViewsTestCase(APITestCase):
                 "email": [
                     {
                         "id": 1,
+                        "contact": 1,
                         "email_type": "1",
                         "email": "matt@mspe.me"
                     }
@@ -158,6 +230,7 @@ class ContactBookViewsTestCase(APITestCase):
         response = self.client.put(
             '/api/contacts/phone-number/1',
             {
+                "contact": 1,
                 "phonenumber_type": "2",
                 "phoneNumber": "+447936792548"
             }
@@ -167,6 +240,7 @@ class ContactBookViewsTestCase(APITestCase):
             json.loads(response.content),
             {
                 "id": 1,
+                "contact": 1,
                 "phonenumber_type": "2",
                 "phoneNumber": "+447936792548"
             }
@@ -176,6 +250,7 @@ class ContactBookViewsTestCase(APITestCase):
         response = self.client.put(
             '/api/contacts/email/1',
             {
+                "contact": 1,
                 "email_type": "1",
                 "email": "matthew@mspe.me"
             }
@@ -185,9 +260,41 @@ class ContactBookViewsTestCase(APITestCase):
             json.loads(response.content),
             {
                 "id": 1,
+                "contact": 1,
                 "email_type": "1",
                 "email": "matthew@mspe.me"
             }
+        )
+
+    def adding_same_phone_type(self):
+        response = self.client.post(
+            '/api/contacts/phone-number',
+            {
+                "contact": 1,
+                "phonenumber_type": "2",
+                "phoneNumber": "+447964498453"
+
+            }
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(
+            json.loads(response.content),
+            ['Contact already has a phone number with this type.']
+        )
+
+    def adding_same_email_type(self):
+        response = self.client.post(
+            '/api/contacts/email',
+            {
+                "contact": 1,
+                "email_type": "1",
+                "email": "testing@mspe.me"
+            }
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(
+            json.loads(response.content),
+            ['Contact already has an email with this type.']
         )
 
     def delete_contact_with_default_image(self):
@@ -207,25 +314,88 @@ class ContactBookViewsTestCase(APITestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
+    def update_profile_picture(self):
+        photo_file = self.generate_photo_file(file_name="new_pic")
+        response = self.client.put(
+            '/api/contacts/profile-picture/1',
+            { 'profile_picture': photo_file },
+            format='multipart'
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(
+            json.loads(response.content),
+            {
+                "id": 1,
+                "profile_picture": "http://testserver/media/profile_pictures/new_pic.png"
+            }
+        )
+
+    def create_contact_error(self):
+        response = self.client.post(
+            '/api/contacts/',
+            {
+                "first_name": "Matt"
+            }
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(
+            json.loads(response.content),
+            {
+                "name": ["This field is required."]
+            }
+        )
+
+    def put_phone_number_error(self):
+        response = self.client.put(
+            '/api/contacts/phone-number/1',
+            {
+                "phone-number": "+447954793156"
+            }
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(
+            json.loads(response.content),
+            {
+                "contact": ["This field is required."],
+                "phoneNumber": ["This field is required."]
+            }
+        )
+
+    def put_email_error(self):
+        response = self.client.put(
+            '/api/contacts/email/1',
+            {
+                "email": "+447954793156"
+            }
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(
+            json.loads(response.content),
+            {
+                "contact": ["This field is required."],
+                "email": ["Enter a valid email address."]
+            }
+        )
+
     def test_in_order(self):
-        # Create
         self.create_new_contact_default_image()
         self.create_new_contact_with_image()
-        # self.create_new_phone_number()
-        # self.create_new_email()
-
-        # Request
         self.request_contact_that_exists()
         self.request_contact_that_doesnt_exist()
+        self.create_phone_number_that_already_exists()
+        self.create_email_that_already_exists()
         self.list_all_contacts()
-
-        # Update
+        self.create_new_phone_number()
+        self.create_new_email()
         self.update_contact_name()
         self.update_phone_number()
         self.update_email()
-        # self.update_profile_picture()
-
-        # Delete
+        self.adding_same_phone_type()
+        self.adding_same_email_type()
+        self.update_profile_picture()
+        self.create_contact_error()
+        self.put_phone_number_error()
+        self.put_email_error()
         self.delete_contact_with_default_image()
         self.delete_phone_number()
         self.delete_email()
