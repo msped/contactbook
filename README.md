@@ -55,3 +55,13 @@ Detailed below are routes and information required to create and received reques
 `PUT /api/contacts/profile-picture/:contact_id`
 - Updates a single contacts profile picture using the following body:
     - `"profile_picture"`: file
+
+### How to run this project on your local machine
+
+In order to the the code locally you must first clone the repository using `git clone https://github.com/msped/contactbook.git`.
+
+Once cloned open your terminal and navigate to the folder the files have been downloaded to. Using `python -m venv *venv name*`, setup a virtual environment for this project.
+
+To access the virtual environment, in your terminal at the same location, run `*venv name*\Scripts\activate` on Windows and `source *venv name*/Scripts/activate` on the Mac. Once the the virtual environment is activated it should shows `(*venv name*)` in the termial before your current path. 
+
+In order to run the project you must install it's dependencies using `pip install -r requirements.txt`. Once the install has completed, you can run `python manage.py runserver` where the server will run on `http://127.0.0.1:8000/`.
