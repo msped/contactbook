@@ -23,12 +23,12 @@ class ContactBookViewsTestCase(APITestCase):
         contact = Contacts.objects.get(id=1)
         PhoneNumbers.objects.create(
             contact=contact,
-            phonenumber_type= "1",
+            phonenumber_type= "home",
             phoneNumber= "+447964974125"
         )
         Emails.objects.create(
             contact=contact,
-            email_type="1",
+            email_type="pers",
             email='matt@mspe.me'
         )
 
@@ -86,7 +86,7 @@ class ContactBookViewsTestCase(APITestCase):
             '/api/contacts/phone-number',
             {
                 "contact": 1,
-                "phonenumber_type": "2",
+                "phonenumber_type": "mob",
                 "phoneNumber": "+447936498745"
             }
         )
@@ -96,7 +96,7 @@ class ContactBookViewsTestCase(APITestCase):
             {
                 "id": 2,
                 "contact": 1,
-                "phonenumber_type": "2",
+                "phonenumber_type": "mob",
                 "phoneNumber": "+447936498745"
             }
         )
@@ -106,7 +106,7 @@ class ContactBookViewsTestCase(APITestCase):
             '/api/contacts/email',
             {
                 "contact": 1,
-                "email_type": "2",
+                "email_type": "work",
                 "email": "test@mspe.me"
             }
         )
@@ -116,7 +116,7 @@ class ContactBookViewsTestCase(APITestCase):
             {
                 "id": 2,
                 "contact": 1,
-                "email_type": "2",
+                "email_type": "work",
                 "email": "test@mspe.me"
             }
         )
@@ -126,7 +126,7 @@ class ContactBookViewsTestCase(APITestCase):
             '/api/contacts/phone-number',
             {
                 "contact": 1,
-                "phonenumber_type": "2",
+                "phonenumber_type": "mob",
                 "phoneNumber": "+447964974125"
             }
         )
@@ -141,7 +141,7 @@ class ContactBookViewsTestCase(APITestCase):
             '/api/contacts/email',
             {
                 "contact": 1,
-                "email_type": "2",
+                "email_type": "work",
                 "email": "matt@mspe.me"
             }
         )
@@ -162,7 +162,7 @@ class ContactBookViewsTestCase(APITestCase):
                     {
                         "id": 1,
                         "contact": 1,
-                        "phonenumber_type": "1",
+                        "phonenumber_type": "home",
                         "phoneNumber": "+447964974125"
                     }
                 ],
@@ -170,7 +170,7 @@ class ContactBookViewsTestCase(APITestCase):
                     {
                         "id": 1,
                         "contact": 1,
-                        "email_type": "1",
+                        "email_type": "pers",
                         "email": "matt@mspe.me"
                     }
                 ]
@@ -231,7 +231,7 @@ class ContactBookViewsTestCase(APITestCase):
             '/api/contacts/phone-number/1',
             {
                 "contact": 1,
-                "phonenumber_type": "2",
+                "phonenumber_type": "mob",
                 "phoneNumber": "+447936792548"
             }
         )
@@ -241,7 +241,7 @@ class ContactBookViewsTestCase(APITestCase):
             {
                 "id": 1,
                 "contact": 1,
-                "phonenumber_type": "2",
+                "phonenumber_type": "mob",
                 "phoneNumber": "+447936792548"
             }
         )
@@ -251,7 +251,7 @@ class ContactBookViewsTestCase(APITestCase):
             '/api/contacts/email/1',
             {
                 "contact": 1,
-                "email_type": "1",
+                "email_type": "pers",
                 "email": "matthew@mspe.me"
             }
         )
@@ -261,7 +261,7 @@ class ContactBookViewsTestCase(APITestCase):
             {
                 "id": 1,
                 "contact": 1,
-                "email_type": "1",
+                "email_type": "pers",
                 "email": "matthew@mspe.me"
             }
         )
@@ -271,7 +271,7 @@ class ContactBookViewsTestCase(APITestCase):
             '/api/contacts/phone-number',
             {
                 "contact": 1,
-                "phonenumber_type": "2",
+                "phonenumber_type": "mob",
                 "phoneNumber": "+447964498453"
 
             }
@@ -287,7 +287,7 @@ class ContactBookViewsTestCase(APITestCase):
             '/api/contacts/email',
             {
                 "contact": 1,
-                "email_type": "1",
+                "email_type": "pers",
                 "email": "testing@mspe.me"
             }
         )
@@ -433,13 +433,13 @@ class ContactBookModelsTestCase(APITestCase):
         contact = Contacts.objects.get(name="Matt Edwards")
         phone_number = PhoneNumbers(
             contact=contact,
-            phonenumber_type='1',
+            phonenumber_type='home',
             phoneNumber="+44796411359"
         )
         phone_number.save()
 
         self.assertEqual(phone_number.contact.name, "Matt Edwards")
-        self.assertEqual(phone_number.phonenumber_type, "1")
+        self.assertEqual(phone_number.phonenumber_type, "home")
         self.assertEqual(phone_number.phoneNumber, "+44796411359")
 
     def phonenumber_str(self):
@@ -450,13 +450,13 @@ class ContactBookModelsTestCase(APITestCase):
         contact = Contacts.objects.get(name="Matt Edwards")
         email = Emails(
             contact=contact,
-            email_type='2',
+            email_type='work',
             email="matt@mspe.me"
         )
         email.save()
 
         self.assertEqual(email.contact.name, "Matt Edwards")
-        self.assertEqual(email.email_type, "2")
+        self.assertEqual(email.email_type, "work")
         self.assertEqual(email.email, "matt@mspe.me")
 
     def email_str(self):
