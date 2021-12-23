@@ -4,3 +4,6 @@ venv/
 db.sqlite3
 htmlcov/
 .coverage
+
+/media/profile_pictures/*
+!/media/profile_pictures/default.jpg
