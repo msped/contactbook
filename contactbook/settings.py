@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'phonenumber_field',
     'contacts',
+    'auth',
 
     'django_cleanup.apps.CleanupConfig',
 ]
