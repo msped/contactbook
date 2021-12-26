@@ -51,6 +51,7 @@ class ContactDetailSerializer(serializers.ModelSerializer):
         model = Contacts
         fields = [
             'id',
+            'owner',
             'profile_picture',
             'name',
             'phone_number',
@@ -60,7 +61,7 @@ class ContactDetailSerializer(serializers.ModelSerializer):
 class ContactsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Contacts
-        fields = ['id', 'profile_picture', 'name']
+        fields = ['id', 'owner', 'profile_picture', 'name']
 
 class ProfilePictureSerializer(serializers.ModelSerializer):
     class Meta:
