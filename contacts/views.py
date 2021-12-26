@@ -1,6 +1,7 @@
 from rest_framework import status
-from rest_framework.generics import (CreateAPIView, ListCreateAPIView, UpdateAPIView,
-                                     get_object_or_404)
+from rest_framework.generics import (CreateAPIView, ListCreateAPIView,
+                                     UpdateAPIView, get_object_or_404)
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -15,6 +16,7 @@ class CreateListContactView(ListCreateAPIView):
     """Create a contact or list all contacts"""
     serializer_class = ContactsSerializer
     queryset = Contacts.objects.all()
+    permission_classes = [IsAuthenticated]
 
     def create(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data, many=False)
@@ -24,6 +26,8 @@ class CreateListContactView(ListCreateAPIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class ContactDetailView(APIView):
+    permission_classes = [IsAuthenticated]
+
     """Get detailed contact or delete"""
     def get(self, request, contact_id):
         contact = get_object_or_404(Contacts, id=contact_id)
@@ -37,12 +41,14 @@ class ContactDetailView(APIView):
 
 class CreatePhoneNumber(CreateAPIView):
     serializer_class = PhoneNumberSerializer
+    permission_classes = [IsAuthenticated]
 
 class CreateEmail(CreateAPIView):
     serializer_class = EmailSerializer
 
 class UpdatePhoneNumber(APIView):
     serializer_class = PhoneNumberSerializer
+    permission_classes = [IsAuthenticated]
 
     def put(self, request, phone_number_id):
         number = get_object_or_404(PhoneNumbers, id=phone_number_id)
@@ -62,6 +68,7 @@ class UpdatePhoneNumber(APIView):
 
 class UpdateEmail(APIView):
     serializer_class = EmailSerializer
+    permission_classes = [IsAuthenticated]
 
     def put(self, request, email_id):
         email = get_object_or_404(Emails, id=email_id)
@@ -80,6 +87,7 @@ class UpdateEmail(APIView):
         )
 
 class UpdateContactName(UpdateAPIView):
+    permission_classes = [IsAuthenticated]
     serializer_class = ContactNameSerializer
     lookup_url_kwarg = "contact_id"
     lookup_field = "id"
@@ -88,6 +96,7 @@ class UpdateContactName(UpdateAPIView):
         return Contacts.objects.all()
 
 class UpdateProfilePicutre(UpdateAPIView):
+    permission_classes = [IsAuthenticated]
     serializer_class = ProfilePictureSerializer
     lookup_url_kwarg = "contact_id"
     lookup_field = "id"
