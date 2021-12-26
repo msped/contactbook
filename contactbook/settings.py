@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'phonenumber_field',
     'contacts',
-    'auth',
+    'authentication',
 
     'django_cleanup.apps.CleanupConfig',
 ]
@@ -142,6 +142,6 @@ MEDIA_URL = '/media/'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework_simplejet.authentication.JWTAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
 }
