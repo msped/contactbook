@@ -1,9 +1,11 @@
 from django.db import models
+from django.contrib.auth.models import User
 from phonenumber_field.modelfields import PhoneNumberField
 
 # Create your models here.
 
 class Contacts(models.Model):
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
     profile_picture = models.ImageField(
         upload_to="profile_pictures/",
         default="profile_pictures/default.jpg"
