@@ -3,6 +3,8 @@ import json
 import shutil
 import tempfile
 
+from django.contrib.auth.hashers import make_password
+from django.contrib.auth.models import User
 from django.test import override_settings
 from PIL import Image
 from rest_framework import status
@@ -404,7 +406,14 @@ class ContactBookModelsTestCase(APITestCase):
 
     def setUp(self):
         """Set up database with prepopulated data"""
+        User.objects.create(
+            username="test@mspe.me",
+            email="test@mspe.me",
+            password=make_password("5up3R!97")
+        )
+        user = User.objects.get(username="test@mspe.me")
         Contacts.objects.create(
+            owner=user,
             name="Matt Edwards",
         )
 
@@ -421,11 +430,14 @@ class ContactBookModelsTestCase(APITestCase):
         self.assertEqual(str(contact), "Matt Edwards")
 
     def test_create_contact_without_image(self):
+        user = User.objects.get(username="test@mspe.me")
         contact = Contacts(
+            owner=user,
             name="John Doe",
         )
         contact.save()
 
+        self.assertEqual(contact.owner.username, "test@mspe.me")
         self.assertEqual(contact.profile_picture.url, "/media/profile_pictures/default.jpg")
         self.assertEqual(contact.name, "John Doe")
 
