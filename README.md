@@ -77,7 +77,7 @@ Detailed below are routes and information required to create and received reques
 }
 ```
 - `"phonenumber_type"` values are `home` (Home), `mob` (Mobile) & `work` (Work).
-- `"phoneNumber"` format is UK only starting in +44..
+- `"phoneNumber"` works with mobile and landline numbers.
 
 `POST /api/contacts/email`
 - Creates a new email using the following body:
@@ -101,7 +101,7 @@ Detailed below are routes and information required to create and received reques
 }
 ```
 - `"phonenumber_type"` values are `home` (Home), `mob` (Mobile) & `work` (Work).
-- `"phoneNumber"` format is UK only starting in +44..
+- `"phoneNumber"` works with mobile and landline numbers.
 
 `PUT DELETE /api/contacts/email/:email`
 - Updates a single email record using the following body:
