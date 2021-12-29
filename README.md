@@ -23,7 +23,7 @@ Detailed below are routes and information required to create and received reques
 - Creates a user using the following body:
 ```
 {
-    "username": email,
+    "username": string,
     "password": string,
     "password2": string
     
