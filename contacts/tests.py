@@ -33,7 +33,7 @@ class ContactBookViewsTestCase(APITestCase):
         PhoneNumbers.objects.create(
             contact=contact,
             phonenumber_type= "home",
-            phoneNumber= "+447964974125"
+            phoneNumber= "07964974125"
         )
         Emails.objects.create(
             contact=contact,
@@ -125,7 +125,7 @@ class ContactBookViewsTestCase(APITestCase):
             {
                 "contact": 1,
                 "phonenumber_type": "mob",
-                "phoneNumber": "+447936498745"
+                "phoneNumber": "07936498745"
             },
             **{'HTTP_AUTHORIZATION': f'Bearer {access_token}'}
         )
@@ -136,7 +136,7 @@ class ContactBookViewsTestCase(APITestCase):
                 "id": 2,
                 "contact": 1,
                 "phonenumber_type": "mob",
-                "phoneNumber": "+447936498745"
+                "phoneNumber": "07936 498745"
             }
         )
 
@@ -185,14 +185,14 @@ class ContactBookViewsTestCase(APITestCase):
             {
                 "contact": 1,
                 "phonenumber_type": "mob",
-                "phoneNumber": "+447964974125"
+                "phoneNumber": "07964974125"
             },
             **{'HTTP_AUTHORIZATION': f'Bearer {access_token}'}
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(
             json.loads(response.content),
-            {'non_field_errors': ['Contact with the phone number +447964974125 already exists.']}
+            {'non_field_errors': ['Contact with the phone number 07964974125 already exists.']}
         )
 
     def create_email_that_already_exists(self):
@@ -242,7 +242,7 @@ class ContactBookViewsTestCase(APITestCase):
                         "id": 1,
                         "contact": 1,
                         "phonenumber_type": "home",
-                        "phoneNumber": "+447964974125"
+                        "phoneNumber": "07964 974125"
                     }
                 ],
                 "email": [
@@ -350,7 +350,7 @@ class ContactBookViewsTestCase(APITestCase):
             {
                 "contact": 1,
                 "phonenumber_type": "mob",
-                "phoneNumber": "+447936792548"
+                "phoneNumber": "07936792548"
             },
             **{'HTTP_AUTHORIZATION': f'Bearer {access_token}'}
         )
@@ -361,7 +361,7 @@ class ContactBookViewsTestCase(APITestCase):
                 "id": 2,
                 "contact": 1,
                 "phonenumber_type": "mob",
-                "phoneNumber": "+447936792548"
+                "phoneNumber": "07936 792548"
             }
         )
 
@@ -410,7 +410,7 @@ class ContactBookViewsTestCase(APITestCase):
             {
                 "contact": 1,
                 "phonenumber_type": "mob",
-                "phoneNumber": "+447964498453"
+                "phoneNumber": "07964498453"
 
             },
             **{'HTTP_AUTHORIZATION': f'Bearer {access_token}'}
@@ -557,7 +557,7 @@ class ContactBookViewsTestCase(APITestCase):
         response = self.client.put(
             '/api/contacts/phone-number/1',
             {
-                "phone-number": "+447954793156"
+                "phone-number": "07954793156"
             },
             **{'HTTP_AUTHORIZATION': f'Bearer {access_token}'}
         )
@@ -583,7 +583,7 @@ class ContactBookViewsTestCase(APITestCase):
         response = self.client.put(
             '/api/contacts/email/1',
             {
-                "email": "+447954793156"
+                "email": "07954793156"
             },
             **{'HTTP_AUTHORIZATION': f'Bearer {access_token}'}
         )
@@ -663,17 +663,17 @@ class ContactBookModelsTestCase(APITestCase):
         phone_number = PhoneNumbers(
             contact=contact,
             phonenumber_type='home',
-            phoneNumber="+44796411359"
+            phoneNumber="0796411359"
         )
         phone_number.save()
 
         self.assertEqual(phone_number.contact.name, "Matt Edwards")
         self.assertEqual(phone_number.phonenumber_type, "home")
-        self.assertEqual(phone_number.phoneNumber, "+44796411359")
+        self.assertEqual(phone_number.phoneNumber, "0796411359")
 
     def phonenumber_str(self):
         phonenumber = PhoneNumbers.objects.get(id=1)
-        self.assertEqual(str(phonenumber), "Matt Edwards: Home - +44796411359")
+        self.assertEqual(str(phonenumber), "Matt Edwards: Home - 0796411359")
 
     def create_email(self):
         contact = Contacts.objects.get(name="Matt Edwards")
