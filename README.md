@@ -14,10 +14,54 @@
 
 Detailed below are routes and information required to create and received requests.
 
+### Authorization
+---
+
+**NOTE** - For ease of the application in development the access token has been sent to an expire time of 1 day.
+
+`POST /api/auth/register`
+- Creates a user using the following body:
+```
+{
+    "username": email,
+    "password": string,
+    "password2": string
+    
+}
+```
+
+`POST /api/auth/token`
+- Provides access and refresh token using the following body: 
+```
+{
+    "username": string,
+    "password": string
+}
+```
+
+`POST /api/auth/token/refresh`
+- Obtains new access token
+- Requires `refresh` token provided in response from `/api/auth/token`
+
+`DELETE /api/auth/delete/:user_id`
+- Deletes a user along with all associated phone numbers and emails.
+- User `id` is displayed on creation of a User
+
+### Contacts
+---
+
+**NOTE** - All of the below views require authorization. In Postman under Authorization select Bearer token from the drop-down and place the access token provided from the `/api/auth/token` or `/api/auth/token/refresh` response in to the input box. Failure to do so will result in a response of `You don't have permission to perform this action` as you aren't authorized.
+
 `GET POST /api/contacts`
 - `GET` returns all contacts.
 - `POST` creates a contact using the following body:
-    - `"profile_picture"`: `file`, `"name"`: `string`.
+```
+{
+    "profile_picture"`: file,
+    "name": string
+}
+```
+- If `profile_picture` is not defined, it will use a default image.
 
 `GET DELETE /api/contacts/:contact_id`
 - `GET` return single contact with associated phone numbers and emails.
@@ -25,38 +69,70 @@ Detailed below are routes and information required to create and received reques
 
 `POST /api/contacts/phone-number`
 - Creates a new phone number using the following body:
-    - `"contact"`: `id` of the associated contact, `"phonenumber_type"`: `string`, `"phoneNumber"`: `string`.
+```
+{
+    "contact": id,
+    "phonenumber_type": string,
+    "phoneNumber": string
+}
+```
 - `"phonenumber_type"` values are `home` (Home), `mob` (Mobile) & `work` (Work).
 - `"phoneNumber"` format is UK only starting in +44..
 
 `POST /api/contacts/email`
 - Creates a new email using the following body:
-    - `"contact"`: `id` of the associated contact, `"email_type"`: `string`, `"email"`: `string`.
+```
+{
+    "contact": id,
+    "email_type": string,
+    "email": string
+}
+```
 - `"email_type"` values are `pers` (Personal) & `work` (Work).
 - `"email"` format will only accept a valid email format, test@example.com.
 
 `PUT DELETE /api/contacts/phone-number/:phone_number_id`
 - Updates a single phone number record using the following body:
-    - `"contact"`: `id` of the associated contact, `"phonenumber_type"`: `string`, `"phoneNumber"`: `string`.
+```
+{
+    "contact": id,
+    "phonenumber_type": string,
+    "phoneNumber": string
+}
+```
 - `"phonenumber_type"` values are `home` (Home), `mob` (Mobile) & `work` (Work).
 - `"phoneNumber"` format is UK only starting in +44..
 
 `PUT DELETE /api/contacts/email/:email`
 - Updates a single email record using the following body:
-    - `"contact"`: `id` of the associated contact, `"phonenumber_type"`: `string`, `"phoneNumber"`: `string`.
-- `"phonenumber_type"` values are `home` (Home), `mob` (Mobile) & `work` (Work).
-- `"phoneNumber"` format is UK only starting in +44..
+```
+{
+    "contact": id,
+    "email_type": string,
+    "email": string
+}
+```
+- `"email_type"` values are `pers` (Personal) & `work` (Work).
+- `"email"` format will only accept a valid email format, test@example.com.
 
 
 `PUT /api/contacts/name/:contact_id`
 - Updates a single contacts name using the following body:
-    - `"name"`: `string`
+ ```
+{
+    "name": string
+}
+```
 
 `PUT /api/contacts/profile-picture/:contact_id`
 - Updates a single contacts profile picture using the following body:
-    - `"profile_picture"`: file
+```
+{
+    "profile_picture": file
+}
+```
 
-### How to run this project on your local machine
+## How to run this project on your local machine
 
 In order to the the code locally you must first clone the repository using `git clone https://github.com/msped/contactbook.git`.
 
