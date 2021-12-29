@@ -36,13 +36,13 @@ class ContactDetailView(APIView):
     """Get detailed contact or delete"""
     def get(self, request, contact_id):
         contact = get_object_or_404(Contacts, id=contact_id)
-        self.check_object_permissions(request, contact)
+        self.check_object_permissions(request, contact.owner)
         serializer = ContactDetailSerializer(contact, many=False)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def delete(self, request, contact_id):
         contact = get_object_or_404(Contacts, id=contact_id)
-        self.check_object_permissions(request, contact)
+        self.check_object_permissions(request, contact.owner)
         contact.delete()
         return Response(f"Contact {contact.name} deleted.", status=status.HTTP_200_OK)
 
@@ -60,7 +60,7 @@ class UpdatePhoneNumber(APIView):
 
     def put(self, request, phone_number_id):
         number = get_object_or_404(PhoneNumbers, id=phone_number_id)
-        self.check_object_permissions(request, number)
+        self.check_object_permissions(request, number.contact.owner)
         serializer = self.serializer_class(number, data=request.data,
                                     context={'phonenumber_id': phone_number_id})
         if serializer.is_valid():
@@ -70,7 +70,7 @@ class UpdatePhoneNumber(APIView):
 
     def delete(self, request, phone_number_id):
         number = get_object_or_404(PhoneNumbers, id=phone_number_id)
-        self.check_object_permissions(request, number)
+        self.check_object_permissions(request, number.contact.owner)
         number.delete()
         return Response(
             f"Phone number {number.phoneNumber} has been deleted.",
@@ -83,7 +83,7 @@ class UpdateEmail(APIView):
 
     def put(self, request, email_id):
         email = get_object_or_404(Emails, id=email_id)
-        self.check_object_permissions(request, email)
+        self.check_object_permissions(request, email.contact.owner)
         serializer = self.serializer_class(email, data=request.data, context={'email_id': email_id})
         if serializer.is_valid():
             serializer.save()
@@ -92,7 +92,7 @@ class UpdateEmail(APIView):
 
     def delete(self, request, email_id):
         email = get_object_or_404(Emails, id=email_id)
-        self.check_object_permissions(request, email)
+        self.check_object_permissions(request, email.contact.owner)
         return Response(
             f"Email {email.email} has been deleted.",
             status=status.HTTP_204_NO_CONTENT
