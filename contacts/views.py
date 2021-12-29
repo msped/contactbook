@@ -4,7 +4,8 @@ from rest_framework.generics import (CreateAPIView, ListCreateAPIView,
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
+from django.contrib.auth.models import User
+from authentication.permissions import IsOwner
 from .models import Contacts, Emails, PhoneNumbers
 from .serializers import (ContactDetailSerializer, ContactNameSerializer,
                           ContactsSerializer, EmailSerializer,
@@ -18,7 +19,8 @@ class CreateListContactView(ListCreateAPIView):
     permission_classes = [IsAuthenticated]
 
     def create(self, request, *args, **kwargs):
-        serializer = self.serializer_class(data=request.data, many=False)
+        serializer = self.serializer_class(data=request.data, many=False,
+                                            context={'user_id': self.request.user.id})
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -29,25 +31,18 @@ class CreateListContactView(ListCreateAPIView):
         return Contacts.objects.filter(owner=user)
 
 class ContactDetailView(APIView):
+    permission_classes = (IsAuthenticated, IsOwner)
 
     """Get detailed contact or delete"""
     def get(self, request, contact_id):
         contact = get_object_or_404(Contacts, id=contact_id)
-        if request.user.id != contact.owner.id:
-            return Response(
-                "You don't have access to view this contact.",
-                status=status.HTTP_401_UNAUTHORIZED
-            )
+        self.check_object_permissions(request, contact)
         serializer = ContactDetailSerializer(contact, many=False)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def delete(self, request, contact_id):
         contact = get_object_or_404(Contacts, id=contact_id)
-        if request.user.id != contact.owner.id:
-            return Response(
-                "You don't have access to view this contact.",
-                status=status.HTTP_401_UNAUTHORIZED
-            )
+        self.check_object_permissions(request, contact)
         contact.delete()
         return Response(f"Contact {contact.name} deleted.", status=status.HTTP_200_OK)
 
@@ -61,14 +56,11 @@ class CreateEmail(CreateAPIView):
 
 class UpdatePhoneNumber(APIView):
     serializer_class = PhoneNumberSerializer
+    permission_classes = (IsAuthenticated, IsOwner)
 
     def put(self, request, phone_number_id):
         number = get_object_or_404(PhoneNumbers, id=phone_number_id)
-        if request.user.id != number.contact.owner.id:
-            return Response(
-                "You don't have access to view this contact.",
-                status=status.HTTP_401_UNAUTHORIZED
-            )
+        self.check_object_permissions(request, number)
         serializer = self.serializer_class(number, data=request.data,
                                     context={'phonenumber_id': phone_number_id})
         if serializer.is_valid():
@@ -78,11 +70,7 @@ class UpdatePhoneNumber(APIView):
 
     def delete(self, request, phone_number_id):
         number = get_object_or_404(PhoneNumbers, id=phone_number_id)
-        if request.user.id != number.contact.owner.id:
-            return Response(
-                "You don't have access to view this contact.",
-                status=status.HTTP_401_UNAUTHORIZED
-            )
+        self.check_object_permissions(request, number)
         number.delete()
         return Response(
             f"Phone number {number.phoneNumber} has been deleted.",
@@ -91,15 +79,11 @@ class UpdatePhoneNumber(APIView):
 
 class UpdateEmail(APIView):
     serializer_class = EmailSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = (IsAuthenticated, IsOwner)
 
     def put(self, request, email_id):
         email = get_object_or_404(Emails, id=email_id)
-        if request.user.id != email.contact.owner.id:
-            return Response(
-                "You don't have access to view this contact.",
-                status=status.HTTP_401_UNAUTHORIZED
-            )
+        self.check_object_permissions(request, email)
         serializer = self.serializer_class(email, data=request.data, context={'email_id': email_id})
         if serializer.is_valid():
             serializer.save()
@@ -108,12 +92,7 @@ class UpdateEmail(APIView):
 
     def delete(self, request, email_id):
         email = get_object_or_404(Emails, id=email_id)
-        if request.user.id != email.contact.owner.id:
-            return Response(
-                "You don't have access to view this contact.",
-                status=status.HTTP_401_UNAUTHORIZED
-            )
-        email.delete()
+        self.check_object_permissions(request, email)
         return Response(
             f"Email {email.email} has been deleted.",
             status=status.HTTP_204_NO_CONTENT
