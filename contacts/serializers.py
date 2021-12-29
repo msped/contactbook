@@ -31,13 +31,13 @@ class EmailSerializer(serializers.ModelSerializer):
         url_id = self.context.get('email_id')
         if Emails.objects.filter(~Q(id=url_id), email=attrs['email']).exists():
             raise serializers.ValidationError(
-                f"Contact with the phone number {attrs['email']} already exists."
+                f"Contact with the email {attrs['email']} already exists."
             )
 
         if Emails.objects.filter(~Q(id=url_id), contact=attrs['contact'],
                                  email_type=attrs['email_type']).exists():
             raise serializers.ValidationError(
-                'Contact already has a phone number with this type.'
+                'Contact already has an email with this type.'
             )
         return attrs
 
