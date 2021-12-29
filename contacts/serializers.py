@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from rest_framework import serializers
 from django.db.models import Q
 from .models import Contacts, Emails, PhoneNumbers
@@ -48,7 +49,6 @@ class ContactDetailSerializer(serializers.ModelSerializer):
         model = Contacts
         fields = [
             'id',
-            'owner',
             'profile_picture',
             'name',
             'phone_number',
@@ -58,7 +58,15 @@ class ContactDetailSerializer(serializers.ModelSerializer):
 class ContactsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Contacts
-        fields = ['id', 'owner', 'profile_picture', 'name']
+        fields = ['id', 'profile_picture', 'name']
+
+    def create(self, validated_data):
+        user_id = self.context.get('user_id')
+        owner = User.objects.get(id=user_id)
+        validated_data['owner'] = owner
+        contact = Contacts(**validated_data)
+        contact.save()
+        return contact
 
 class ProfilePictureSerializer(serializers.ModelSerializer):
     class Meta:
