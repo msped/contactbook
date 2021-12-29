@@ -138,6 +138,8 @@ In order to the the code locally you must first clone the repository using `git 
 
 Once cloned open your terminal and navigate to the folder the files have been downloaded to. Using `python -m venv *venv name*`, setup a virtual environment for this project.
 
-To access the virtual environment, in your terminal at the same location, run `*venv name*\Scripts\activate` on Windows and `source *venv name*/Scripts/activate` on the Mac. Once the the virtual environment is activated it should shows `(*venv name*)` in the termial before your current path. 
+To access the virtual environment, in your terminal at the same location, run `*venv name*\Scripts\activate` on Windows and `source *venv name*/Scripts/activate` on the Mac. Once the the virtual environment is activated it should shows `(*venv name*)` in the termial before your current path.
 
-In order to run the project you must install it's dependencies using `pip install -r requirements.txt`. Once the install has completed, you can run `python manage.py runserver` where the server will run on `http://127.0.0.1:8000/`.
+In order to run the project you must install it's dependencies using `pip install -r requirements.txt`. Before starting the server you must provide Django with a secret key by creating a .env file and populating it with `SECRET_KEY="KEY_GOES_HERE"`. You can obtain a randomly generated secret key from [Djecrety](https://djecrety.ir/).
+
+Now you can run `python manage.py runserver` in your terminal where the server will run on `http://127.0.0.1:8000/`.
