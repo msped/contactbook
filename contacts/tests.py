@@ -596,6 +596,56 @@ class ContactBookViewsTestCase(APITestCase):
             }
         )
 
+    def get_email(self):
+        access_request = self.client.post(
+            '/api/auth/token',
+            {
+                'username': 'test@mspe.me',
+                'password': '5up3R!97'
+            },
+            format='json'
+        )
+        access_token = access_request.data['access']
+        response = self.client.get(
+            '/api/contacts/email/1',
+            **{'HTTP_AUTHORIZATION': f'Bearer {access_token}'}
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(
+            json.loads(response.content),
+            {
+                "id": 1,
+                "contact": 1,
+                "email_type": "pers",
+                "email": "matt@mspe.me"
+            }
+        )
+
+    def get_phone_number(self):
+        access_request = self.client.post(
+            '/api/auth/token',
+            {
+                'username': 'test@mspe.me',
+                'password': '5up3R!97'
+            },
+            format='json'
+        )
+        access_token = access_request.data['access']
+        response = self.client.get(
+            '/api/contacts/phone-number/1',
+            **{'HTTP_AUTHORIZATION': f'Bearer {access_token}'}
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(
+            json.loads(response.content),
+            {
+                "id": 1,
+                "contact": 1,
+                "phonenumber_type": "home",
+                "phoneNumber": "07964 974125"
+            }
+        )
+
     def test_in_order(self):
         self.create_new_contact_default_image()
         self.create_new_contact_with_image()
@@ -606,6 +656,8 @@ class ContactBookViewsTestCase(APITestCase):
         self.list_all_contacts()
         self.create_new_phone_number()
         self.create_new_email()
+        self.get_email()
+        self.get_phone_number()
         self.update_contact_name()
         self.update_phone_number()
         self.update_email()
