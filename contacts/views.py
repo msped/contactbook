@@ -54,9 +54,15 @@ class CreateEmail(CreateAPIView):
     serializer_class = EmailSerializer
     permission_classes = [IsAuthenticated]
 
-class UpdatePhoneNumber(APIView):
+class PhoneNumber(APIView):
     serializer_class = PhoneNumberSerializer
     permission_classes = (IsAuthenticated, IsOwner)
+
+    def get(self, request, phone_number_id):
+        number = get_object_or_404(PhoneNumbers, id=phone_number_id)
+        self.check_object_permissions(request, number.contact.owner)
+        serializer = self.serializer_class(number, many=False)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     def put(self, request, phone_number_id):
         number = get_object_or_404(PhoneNumbers, id=phone_number_id)
