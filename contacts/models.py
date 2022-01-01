@@ -24,7 +24,7 @@ class PhoneNumbers(models.Model):
 
     contact = models.ForeignKey(Contacts, on_delete=models.CASCADE, related_name="phone_number")
     phonenumber_type = models.CharField(max_length=4, choices=Options.choices, default='1')
-    phoneNumber = PhoneNumberField(blank=False, null=False)
+    phoneNumber = PhoneNumberField()
 
     def __str__(self):
         return f'{self.contact.name}: {self.get_phonenumber_type_display()} - {self.phoneNumber}'
@@ -37,7 +37,7 @@ class Emails(models.Model):
 
     contact = models.ForeignKey(Contacts, on_delete=models.CASCADE, related_name="email")
     email_type = models.CharField(max_length=4, choices=Options.choices, default='1')
-    email = models.EmailField(null=False, blank=False)
+    email = models.EmailField()
 
     def __str__(self):
         return f'{self.contact.name}: {self.get_email_type_display()} - {self.email}'
