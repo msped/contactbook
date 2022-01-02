@@ -91,8 +91,9 @@ Detailed below are routes and information required to create and received reques
 - `"email_type"` values are `pers` (Personal) & `work` (Work).
 - `"email"` format will only accept a valid email format, test@example.com.
 
-`PUT DELETE /api/contacts/phone-number/:phone_number_id`
-- Updates a single phone number record using the following body:
+`GET PUT DELETE /api/contacts/phone-number/:phone_number_id`
+- `GET` returns a single phone number record, or 404 if it doesn't exist.
+- `PUT` updates a single phone number record using the following body:
 ```
 {
     "contact": id,
@@ -100,11 +101,13 @@ Detailed below are routes and information required to create and received reques
     "phoneNumber": string
 }
 ```
-- `"phonenumber_type"` values are `home` (Home), `mob` (Mobile) & `work` (Work).
-- `"phoneNumber"` works with mobile and landline numbers.
+    - `"phonenumber_type"` values are `home` (Home), `mob` (Mobile) & `work` (Work).
+    - `"phoneNumber"` works with mobile and landline numbers.
+- `DELETE` will remove the entry from the database.
 
-`PUT DELETE /api/contacts/email/:email`
-- Updates a single email record using the following body:
+`GET PUT DELETE /api/contacts/email/:email`
+- `GET` returns a single email record, or 404 if it doesn't exist.
+- `PUT` updates a single email record using the following body:
 ```
 {
     "contact": id,
@@ -112,8 +115,9 @@ Detailed below are routes and information required to create and received reques
     "email": string
 }
 ```
-- `"email_type"` values are `pers` (Personal) & `work` (Work).
-- `"email"` format will only accept a valid email format, test@example.com.
+    - `"email_type"` values are `pers` (Personal) & `work` (Work).
+    - `"email"` format will only accept a valid email format, test@example.com.
+- `DELETE` will remove the entry from the database.
 
 
 `PUT /api/contacts/name/:contact_id`
