@@ -50,7 +50,7 @@ Detailed below are routes and information required to create and received reques
 ### Contacts
 ---
 
-**NOTE** - All of the below views require authorization. In Postman under Authorization select Bearer token from the drop-down and place the access token provided from the `/api/auth/token` or `/api/auth/token/refresh` response in to the input box. Failure to do so will result in a response of `You don't have permission to perform this action` as you aren't authorized.
+**NOTE** - All of the below views require authorization using the Bearer token. If using Postman under Authorization select Bearer token from the drop-down and place the access token provided from the `/api/auth/token` or `/api/auth/token/refresh` response in to the input box. Failure to do so will result in a response of `You don't have permission to perform this action` as you aren't authorized.
 
 `GET POST /api/contacts`
 - `GET` returns all contacts.
@@ -101,8 +101,8 @@ Detailed below are routes and information required to create and received reques
     "phoneNumber": string
 }
 ```
-    - `"phonenumber_type"` values are `home` (Home), `mob` (Mobile) & `work` (Work).
-    - `"phoneNumber"` works with mobile and landline numbers.
+- `"phonenumber_type"` values are `home` (Home), `mob` (Mobile) & `work` (Work).
+- `"phoneNumber"` works with mobile and landline numbers.
 - `DELETE` will remove the entry from the database.
 
 `GET PUT DELETE /api/contacts/email/:email`
@@ -115,8 +115,8 @@ Detailed below are routes and information required to create and received reques
     "email": string
 }
 ```
-    - `"email_type"` values are `pers` (Personal) & `work` (Work).
-    - `"email"` format will only accept a valid email format, test@example.com.
+- `"email_type"` values are `pers` (Personal) & `work` (Work).
+- `"email"` format will only accept a valid email format, test@example.com.
 - `DELETE` will remove the entry from the database.
 
 
