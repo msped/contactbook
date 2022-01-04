@@ -43,6 +43,14 @@ Detailed below are routes and information required to create and received reques
 - Obtains new access token
 - Requires `refresh` token provided in response from `/api/auth/token`
 
+`POST /api/auth/logout/blacklist`
+- Logs out a user blacklisting the refresh token from further use, requires refresh_token as part of the post data.
+```
+{
+    "refresh_token": string
+}
+```
+
 `DELETE /api/auth/delete/:user_id`
 - Deletes a user along with all associated phone numbers and emails.
 - User `id` is displayed on creation of a User
