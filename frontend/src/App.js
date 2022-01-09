@@ -9,6 +9,8 @@ import {
 
 import Header from './components/Header'
 
+import Login from './pages/Login'
+
 let theme = createTheme({
   palette: {
     mode: "dark",
@@ -29,7 +31,7 @@ function App() {
         <Box mt={3}>
           <Container maxWidth="md">
             <Routes>
-              <Route path="/login" />
+              <Route path="/login" element={<Login />}/>
               <Route path="/register" />
             </Routes>
           </Container>
