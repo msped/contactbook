@@ -7,6 +7,8 @@ import {
   Routes 
 } from 'react-router-dom'
 
+import Header from './components/Header'
+
 let theme = createTheme({
   palette: {
     mode: "dark",
@@ -23,11 +25,12 @@ function App() {
     <div>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-
+        <Header />
         <Box mt={3}>
           <Container maxWidth="md">
             <Routes>
-              
+              <Route path="/login" />
+              <Route path="/register" />
             </Routes>
           </Container>
         </Box>
