@@ -11,6 +11,7 @@ import Header from './components/Header'
 
 import Login from './pages/Login'
 import Register from './pages/Register'
+import Logout from './pages/Logout'
 
 let theme = createTheme({
   palette: {
@@ -34,6 +35,7 @@ function App() {
             <Routes>
               <Route path="/login" element={<Login />}/>
               <Route path="/register" element={<Register />} />
+              <Route path="/logout" element={<Logout />} />
             </Routes>
           </Container>
         </Box>
