@@ -24,10 +24,10 @@ export default function Header() {
                     <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                         Contact Book
                     </Typography>
-                    <Button color="inherit" herf="/register">
+                    <Button color="inherit" href="/register">
                         Register
                     </Button>
-                    <Button color="inherit" herf="/login">
+                    <Button color="inherit" href="/login">
                         Login
                     </Button>
                 </Toolbar>
