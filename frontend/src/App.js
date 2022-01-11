@@ -14,6 +14,7 @@ import Register from './pages/Register'
 import Logout from './pages/Logout'
 
 import CreateContact from './pages/CreateContact'
+import Contacts from './pages/Contacts' 
 
 let theme = createTheme({
   palette: {
@@ -39,6 +40,7 @@ function App() {
               <Route path="/register" element={<Register />} />
               <Route path="/logout" element={<Logout />} />
               <Route path="/create/contact" element={<CreateContact />} />
+              <Route path="/contacts" element={<Contacts />} />
             </Routes>
           </Container>
         </Box>
