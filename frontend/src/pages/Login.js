@@ -32,7 +32,7 @@ export default function Login() {
             localStorage.setItem('refresh_token', res.data.refresh)
             api.defaults.headers['Authorization'] =
                 'Bearer ' + localStorage.getItem('access_token')
-            history('/')
+            history('/contacts')
         })
     };
 
