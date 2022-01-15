@@ -63,13 +63,13 @@ export default function ContactDetail() {
                     </Typography>
                 </Grid>
                 <Grid item xs={12} mt={5}>
-                    { phonenumbers === undefined || phonenumbers.length == 0 ? 
+                    { phonenumbers === undefined || phonenumbers.length === 0 ? 
                        <Typography textAlign="center">This contact has no phone number entries.</Typography>
                     : <ContentTable table="Numbers" items={phonenumbers} />}
                 </Grid>
 
                 <Grid item xs={12} mt={10}>
-                    { emails === undefined || emails.length == 0 ? 
+                    { emails === undefined || emails.length === 0 ? 
                         <Typography textAlign="center">This contact has no email entries.</Typography>
                     : <ContentTable table="Emails" items={emails} />}
                 </Grid>
