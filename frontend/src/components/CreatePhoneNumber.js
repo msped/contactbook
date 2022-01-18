@@ -58,7 +58,7 @@ export default class CreatePhoneNumber extends React.Component {
     return (
       <Fragment>
         <Button onClick={this.handleToggle} color="success" variant="contained">
-          Create <AddIcon />
+          Add <AddIcon />
         </Button>
 
         <Dialog
