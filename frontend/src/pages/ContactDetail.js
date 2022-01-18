@@ -3,9 +3,8 @@ import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import api from '../axios'
 
-
-
 import ContentTable from '../components/Table'
+import CreatePhoneNumber from '../components/CreatePhoneNumber'
 
 const theme = createTheme();
 
@@ -13,6 +12,7 @@ export default function ContactDetail() {
 
     const { contact_id } = useParams()
     const [ contact, setContact ] = useState([])
+    const [ callBack, setCallBack ] = useState([])
 
     const phonenumbers = contact.phone_number
     const emails = contact.email
@@ -23,8 +23,11 @@ export default function ContactDetail() {
             setContact(data)
         }
         search()
-    }, [contact_id])
+    }, [contact_id, callBack])
 
+    const handlePhoneNumberCallback = (childData) => {
+        setCallBack(childData)
+    }
 
     return (
         <ThemeProvider theme={theme}>
@@ -63,15 +66,28 @@ export default function ContactDetail() {
                     </Typography>
                 </Grid>
                 <Grid item xs={12} mt={5}>
+                    <CreatePhoneNumber contactID={contact_id} callbackData={handlePhoneNumberCallback}/>
                     { phonenumbers === undefined || phonenumbers.length === 0 ? 
                        <Typography textAlign="center">This contact has no phone number entries.</Typography>
-                    : <ContentTable table="Numbers" items={phonenumbers} />}
+                    : (
+                        <Grid container spacing={0}>
+                            <Grid item xs={12}>
+                                <ContentTable table="Numbers" items={phonenumbers} />
+                            </Grid>
+                        </Grid>
+                    )}
                 </Grid>
 
                 <Grid item xs={12} mt={10}>
                     { emails === undefined || emails.length === 0 ? 
                         <Typography textAlign="center">This contact has no email entries.</Typography>
-                    : <ContentTable table="Emails" items={emails} />}
+                    : (
+                        <Grid container spacing={0}>
+                            <Grid item xs={12}>
+                                <ContentTable table="Emails" items={emails} />
+                            </Grid>
+                        </Grid>
+                    )}
                 </Grid>
             </Grid>
         </ThemeProvider>
