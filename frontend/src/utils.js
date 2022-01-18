@@ -1,4 +1,4 @@
-export function getPhoneNumberType(item){
+export default function getType(item){
     let type = ''
     switch(item) {
         case 'mob':
@@ -7,16 +7,6 @@ export function getPhoneNumberType(item){
         case 'home':
             type = "Home"
             break
-        case 'work':
-            type = "Work"
-            break
-    }
-    return type
-}
-
-export function getEmailType(item){
-    let type = ''
-    switch(item) {
         case 'work':
             type = "Work"
             break
