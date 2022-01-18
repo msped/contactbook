@@ -66,28 +66,34 @@ export default function ContactDetail() {
                     </Typography>
                 </Grid>
                 <Grid item xs={12} mt={5}>
-                    <CreatePhoneNumber contactID={contact_id} callbackData={handlePhoneNumberCallback}/>
-                    { phonenumbers === undefined || phonenumbers.length === 0 ? 
-                       <Typography textAlign="center">This contact has no phone number entries.</Typography>
-                    : (
-                        <Grid container spacing={0}>
-                            <Grid item xs={12}>
-                                <ContentTable table="Numbers" items={phonenumbers} />
-                            </Grid>
+                    <CreatePhoneNumber contactID={contact_id} callbackData={handlePhoneNumberCallback} mb={3}/>
+                    <Grid container spacing={0} mt={2}>
+                    { phonenumbers === undefined || phonenumbers.length === 0 ? (
+                        <Grid item xs={12}>
+                            <Typography textAlign="center">This contact has no phone number entries.</Typography>
+                        </Grid>
+                    ) : (
+                        
+                        <Grid item xs={12}>
+                            <ContentTable table="Numbers" items={phonenumbers} />
                         </Grid>
                     )}
+                    </Grid>
                 </Grid>
 
                 <Grid item xs={12} mt={10}>
-                    { emails === undefined || emails.length === 0 ? 
-                        <Typography textAlign="center">This contact has no email entries.</Typography>
-                    : (
-                        <Grid container spacing={0}>
-                            <Grid item xs={12}>
-                                <ContentTable table="Emails" items={emails} />
-                            </Grid>
+
+                    <Grid container spacing={0} mt={2}>
+                    { emails === undefined || emails.length === 0 ? (
+                        <Grid item xs={12}>
+                            <Typography textAlign="center">This contact has no email entries.</Typography>
+                        </Grid>
+                    ) : (
+                        <Grid item xs={12}>
+                            <ContentTable table="Emails" items={emails} />
                         </Grid>
                     )}
+                    </Grid>
                 </Grid>
             </Grid>
         </ThemeProvider>
