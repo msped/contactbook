@@ -50,6 +50,9 @@ export default class CreatePhoneNumber extends React.Component {
         console.log(res)
       }
     })
+    .catch((err) => {
+      console.log(err)
+    })
   }
 
   render() {
