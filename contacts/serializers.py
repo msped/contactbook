@@ -8,17 +8,17 @@ from .models import Contacts, Emails, PhoneNumbers
 class PhoneNumberSerializer(serializers.ModelSerializer):
     class Meta:
         model = PhoneNumbers
-        fields = ['id', 'contact', 'phonenumber_type', 'phoneNumber']
+        fields = ['id', 'contact', 'type', 'data']
 
     def validate(self, attrs):
         url_id = self.context.get('phonenumber_id')
-        if PhoneNumbers.objects.filter(~Q(id=url_id), phoneNumber=attrs['phoneNumber']).exists():
+        if PhoneNumbers.objects.filter(~Q(id=url_id), data=attrs['data']).exists():
             raise serializers.ValidationError(
-                f"Contact with the phone number {attrs['phoneNumber']} already exists."
+                f"Contact with the phone number {attrs['data']} already exists."
             )
 
         if PhoneNumbers.objects.filter(~Q(id=url_id), contact=attrs['contact'],
-                                 phonenumber_type=attrs['phonenumber_type']).exists():
+                                 type=attrs['type']).exists():
             raise serializers.ValidationError(
                 'Contact already has a phone number with this type.'
             )
@@ -27,17 +27,17 @@ class PhoneNumberSerializer(serializers.ModelSerializer):
 class EmailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Emails
-        fields = ['id', 'contact', 'email_type', 'email']
+        fields = ['id', 'contact', 'type', 'data']
 
     def validate(self, attrs):
         url_id = self.context.get('email_id')
-        if Emails.objects.filter(~Q(id=url_id), email=attrs['email']).exists():
+        if Emails.objects.filter(~Q(id=url_id), data=attrs['data']).exists():
             raise serializers.ValidationError(
-                f"Contact with the email {attrs['email']} already exists."
+                f"Contact with the email {attrs['data']} already exists."
             )
 
         if Emails.objects.filter(~Q(id=url_id), contact=attrs['contact'],
-                                 email_type=attrs['email_type']).exists():
+                                 type=attrs['type']).exists():
             raise serializers.ValidationError(
                 'Contact already has an email with this type.'
             )

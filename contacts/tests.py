@@ -32,13 +32,13 @@ class ContactBookViewsTestCase(APITestCase):
         contact = Contacts.objects.get(id=1)
         PhoneNumbers.objects.create(
             contact=contact,
-            phonenumber_type= "home",
-            phoneNumber= "07964974125"
+            type= "home",
+            data= "07964974125"
         )
         Emails.objects.create(
             contact=contact,
-            email_type="pers",
-            email='matt@mspe.me'
+            type="pers",
+            data='matt@mspe.me'
         )
 
     @classmethod
@@ -124,8 +124,8 @@ class ContactBookViewsTestCase(APITestCase):
             '/api/contacts/phone-number',
             {
                 "contact": 1,
-                "phonenumber_type": "mob",
-                "phoneNumber": "07936498745"
+                "type": "mob",
+                "data": "07936498745"
             },
             **{'HTTP_AUTHORIZATION': f'Bearer {access_token}'}
         )
@@ -135,8 +135,8 @@ class ContactBookViewsTestCase(APITestCase):
             {
                 "id": 2,
                 "contact": 1,
-                "phonenumber_type": "mob",
-                "phoneNumber": "07936 498745"
+                "type": "mob",
+                "data": "07936 498745"
             }
         )
 
@@ -154,8 +154,8 @@ class ContactBookViewsTestCase(APITestCase):
             '/api/contacts/email',
             {
                 "contact": 1,
-                "email_type": "work",
-                "email": "test@mspe.me"
+                "type": "work",
+                "data": "test@mspe.me"
             },
             **{'HTTP_AUTHORIZATION': f'Bearer {access_token}'}
         )
@@ -165,8 +165,8 @@ class ContactBookViewsTestCase(APITestCase):
             {
                 "id": 2,
                 "contact": 1,
-                "email_type": "work",
-                "email": "test@mspe.me"
+                "type": "work",
+                "data": "test@mspe.me"
             }
         )
 
@@ -184,8 +184,8 @@ class ContactBookViewsTestCase(APITestCase):
             '/api/contacts/phone-number',
             {
                 "contact": 1,
-                "phonenumber_type": "mob",
-                "phoneNumber": "07964974125"
+                "type": "mob",
+                "data": "07964974125"
             },
             **{'HTTP_AUTHORIZATION': f'Bearer {access_token}'}
         )
@@ -209,8 +209,8 @@ class ContactBookViewsTestCase(APITestCase):
             '/api/contacts/email',
             {
                 "contact": 1,
-                "email_type": "work",
-                "email": "matt@mspe.me"
+                "type": "work",
+                "data": "matt@mspe.me"
             },
             **{'HTTP_AUTHORIZATION': f'Bearer {access_token}'}
         )
@@ -241,16 +241,16 @@ class ContactBookViewsTestCase(APITestCase):
                     {
                         "id": 1,
                         "contact": 1,
-                        "phonenumber_type": "home",
-                        "phoneNumber": "07964 974125"
+                        "type": "home",
+                        "data": "07964 974125"
                     }
                 ],
                 "email": [
                     {
                         "id": 1,
                         "contact": 1,
-                        "email_type": "pers",
-                        "email": "matt@mspe.me"
+                        "type": "pers",
+                        "data": "matt@mspe.me"
                     }
                 ]
             },
@@ -349,8 +349,8 @@ class ContactBookViewsTestCase(APITestCase):
             '/api/contacts/phone-number/2',
             {
                 "contact": 1,
-                "phonenumber_type": "mob",
-                "phoneNumber": "07936792548"
+                "type": "mob",
+                "data": "07936792548"
             },
             **{'HTTP_AUTHORIZATION': f'Bearer {access_token}'}
         )
@@ -360,8 +360,8 @@ class ContactBookViewsTestCase(APITestCase):
             {
                 "id": 2,
                 "contact": 1,
-                "phonenumber_type": "mob",
-                "phoneNumber": "07936 792548"
+                "type": "mob",
+                "data": "07936 792548"
             }
         )
 
@@ -379,8 +379,8 @@ class ContactBookViewsTestCase(APITestCase):
             '/api/contacts/email/1',
             {
                 "contact": 1,
-                "email_type": "pers",
-                "email": "matthew@mspe.me"
+                "type": "pers",
+                "data": "matthew@mspe.me"
             },
             **{'HTTP_AUTHORIZATION': f'Bearer {access_token}'}
         )
@@ -390,8 +390,8 @@ class ContactBookViewsTestCase(APITestCase):
             {
                 "id": 1,
                 "contact": 1,
-                "email_type": "pers",
-                "email": "matthew@mspe.me"
+                "type": "pers",
+                "data": "matthew@mspe.me"
             }
         )
 
@@ -409,8 +409,8 @@ class ContactBookViewsTestCase(APITestCase):
             '/api/contacts/phone-number',
             {
                 "contact": 1,
-                "phonenumber_type": "mob",
-                "phoneNumber": "07964498453"
+                "type": "mob",
+                "data": "07964498453"
 
             },
             **{'HTTP_AUTHORIZATION': f'Bearer {access_token}'}
@@ -421,7 +421,7 @@ class ContactBookViewsTestCase(APITestCase):
             {'non_field_errors': ['Contact already has a phone number with this type.']}
         )
 
-    def adding_same_email_type(self):
+    def adding_same_type(self):
         access_request = self.client.post(
             '/api/auth/token',
             {
@@ -435,8 +435,8 @@ class ContactBookViewsTestCase(APITestCase):
             '/api/contacts/email',
             {
                 "contact": 1,
-                "email_type": "pers",
-                "email": "testing@mspe.me"
+                "type": "pers",
+                "data": "testing@mspe.me"
             },
             **{'HTTP_AUTHORIZATION': f'Bearer {access_token}'}
         )
@@ -557,7 +557,7 @@ class ContactBookViewsTestCase(APITestCase):
         response = self.client.put(
             '/api/contacts/phone-number/1',
             {
-                "phone-number": "07954793156"
+                "data": "07954793156"
             },
             **{'HTTP_AUTHORIZATION': f'Bearer {access_token}'}
         )
@@ -565,8 +565,7 @@ class ContactBookViewsTestCase(APITestCase):
         self.assertEqual(
             json.loads(response.content),
             {
-                "contact": ["This field is required."],
-                "phoneNumber": ["This field is required."]
+                'contact': ['This field is required.']
             }
         )
 
@@ -583,7 +582,7 @@ class ContactBookViewsTestCase(APITestCase):
         response = self.client.put(
             '/api/contacts/email/1',
             {
-                "email": "07954793156"
+                "data": "07954793156"
             },
             **{'HTTP_AUTHORIZATION': f'Bearer {access_token}'}
         )
@@ -591,8 +590,12 @@ class ContactBookViewsTestCase(APITestCase):
         self.assertEqual(
             json.loads(response.content),
             {
-                "contact": ["This field is required."],
-                "email": ["Enter a valid email address."]
+                "contact": [
+                    "This field is required."
+                ],
+                "data": [
+                    "Enter a valid email address."
+                ]
             }
         )
 
@@ -616,8 +619,8 @@ class ContactBookViewsTestCase(APITestCase):
             {
                 "id": 1,
                 "contact": 1,
-                "email_type": "pers",
-                "email": "matt@mspe.me"
+                "type": "pers",
+                "data": "matt@mspe.me"
             }
         )
 
@@ -641,8 +644,8 @@ class ContactBookViewsTestCase(APITestCase):
             {
                 "id": 1,
                 "contact": 1,
-                "phonenumber_type": "home",
-                "phoneNumber": "07964 974125"
+                "type": "home",
+                "data": "07964 974125"
             }
         )
 
@@ -662,7 +665,7 @@ class ContactBookViewsTestCase(APITestCase):
         self.update_phone_number()
         self.update_email()
         self.adding_same_phone_type()
-        self.adding_same_email_type()
+        self.adding_same_type()
         self.update_profile_picture()
         self.create_contact_error()
         self.put_phone_number_error()
@@ -714,14 +717,14 @@ class ContactBookModelsTestCase(APITestCase):
         contact = Contacts.objects.get(name="Matt Edwards")
         phone_number = PhoneNumbers(
             contact=contact,
-            phonenumber_type='home',
-            phoneNumber="0796411359"
+            type='home',
+            data="0796411359"
         )
         phone_number.save()
 
         self.assertEqual(phone_number.contact.name, "Matt Edwards")
-        self.assertEqual(phone_number.phonenumber_type, "home")
-        self.assertEqual(phone_number.phoneNumber, "0796411359")
+        self.assertEqual(phone_number.type, "home")
+        self.assertEqual(phone_number.data, "0796411359")
 
     def phonenumber_str(self):
         phonenumber = PhoneNumbers.objects.get(id=1)
@@ -731,14 +734,14 @@ class ContactBookModelsTestCase(APITestCase):
         contact = Contacts.objects.get(name="Matt Edwards")
         email = Emails(
             contact=contact,
-            email_type='work',
-            email="matt@mspe.me"
+            type='work',
+            data="matt@mspe.me"
         )
         email.save()
 
         self.assertEqual(email.contact.name, "Matt Edwards")
-        self.assertEqual(email.email_type, "work")
-        self.assertEqual(email.email, "matt@mspe.me")
+        self.assertEqual(email.type, "work")
+        self.assertEqual(email.data, "matt@mspe.me")
 
     def email_str(self):
         email = Emails.objects.get(id=1)
