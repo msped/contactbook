@@ -79,7 +79,7 @@ class PhoneNumber(APIView):
         self.check_object_permissions(request, number.contact.owner)
         number.delete()
         return Response(
-            f"Phone number {number.phoneNumber} has been deleted.",
+            f"Phone number {number.data} has been deleted.",
             status=status.HTTP_204_NO_CONTENT
         )
 
@@ -106,7 +106,7 @@ class Email(APIView):
         email = get_object_or_404(Emails, id=email_id)
         self.check_object_permissions(request, email.contact.owner)
         return Response(
-            f"Email {email.email} has been deleted.",
+            f"Email {email.data} has been deleted.",
             status=status.HTTP_204_NO_CONTENT
         )
 
