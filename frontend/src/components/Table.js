@@ -7,7 +7,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 
-import { getPhoneNumberType } from '../utils'
+import getType from '../utils'
 
 export default function ContentTable({ items, table }) {
     
@@ -28,9 +28,9 @@ export default function ContentTable({ items, table }) {
                         sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                         >
                             <TableCell component="th" scope="row">
-                                {getPhoneNumberType(row.phonenumber_type)}
+                                {getType(row.type)}
                             </TableCell>
-                            <TableCell align="center">{row.phoneNumber}</TableCell>
+                            <TableCell align="center">{row.data}</TableCell>
                             <TableCell align="center">Edit button here</TableCell>
                     </TableRow>
                 ))}
