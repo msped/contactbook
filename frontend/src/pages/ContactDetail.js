@@ -26,7 +26,7 @@ export default function ContactDetail() {
         search()
     }, [contact_id, callBack])
 
-    const handlePhoneNumberCallback = (childData) => {
+    const handleCallback = (childData) => {
         setCallBack(childData)
     }
 
@@ -67,7 +67,7 @@ export default function ContactDetail() {
                     </Typography>
                 </Grid>
                 <Grid item xs={12} mt={5}>
-                    <CreatePhoneNumber contactID={contact_id} callbackData={handlePhoneNumberCallback} />
+                    <CreatePhoneNumber contactID={contact_id} callbackData={handleCallback} />
                     <Grid container spacing={0} mt={2}>
                     { phonenumbers === undefined || phonenumbers.length === 0 ? (
                         <Grid item xs={12}>
@@ -83,7 +83,7 @@ export default function ContactDetail() {
                 </Grid>
 
                 <Grid item xs={12} mt={10}>
-                    <CreateEmail contactID={contact_id} callbackData={handlePhoneNumberCallback} />
+                    <CreateEmail contactID={contact_id} callbackData={handleCallback} />
                     <Grid container spacing={0} mt={2}>
                     { emails === undefined || emails.length === 0 ? (
                         <Grid item xs={12}>
