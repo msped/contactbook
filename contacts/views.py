@@ -67,8 +67,7 @@ class PhoneNumber(APIView):
     def put(self, request, phone_number_id):
         number = get_object_or_404(PhoneNumbers, id=phone_number_id)
         self.check_object_permissions(request, number.contact.owner)
-        serializer = self.serializer_class(number, data=request.data,
-                                    context={'phonenumber_id': phone_number_id})
+        serializer = self.serializer_class(number, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
@@ -96,7 +95,7 @@ class Email(APIView):
     def put(self, request, email_id):
         email = get_object_or_404(Emails, id=email_id)
         self.check_object_permissions(request, email.contact.owner)
-        serializer = self.serializer_class(email, data=request.data, context={'email_id': email_id})
+        serializer = self.serializer_class(email, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)

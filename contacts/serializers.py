@@ -1,5 +1,4 @@
 from django.contrib.auth.models import User
-from django.db.models import Q
 from rest_framework import serializers
 
 from .models import Contacts, Emails, PhoneNumbers
@@ -11,13 +10,12 @@ class PhoneNumberSerializer(serializers.ModelSerializer):
         fields = ['id', 'contact', 'phonenumber_type', 'phoneNumber']
 
     def validate(self, attrs):
-        url_id = self.context.get('phonenumber_id')
-        if PhoneNumbers.objects.filter(~Q(id=url_id), phoneNumber=attrs['phoneNumber']).exists():
+        if PhoneNumbers.objects.filter(contact_id=attrs['contact'], phoneNumber=attrs['phoneNumber']).exists():
             raise serializers.ValidationError(
                 f"Contact with the phone number {attrs['phoneNumber']} already exists."
             )
 
-        if PhoneNumbers.objects.filter(~Q(id=url_id), contact=attrs['contact'],
+        if PhoneNumbers.objects.filter(contact=attrs['contact'],
                                  phonenumber_type=attrs['phonenumber_type']).exists():
             raise serializers.ValidationError(
                 'Contact already has a phone number with this type.'
@@ -30,13 +28,12 @@ class EmailSerializer(serializers.ModelSerializer):
         fields = ['id', 'contact', 'email_type', 'email']
 
     def validate(self, attrs):
-        url_id = self.context.get('email_id')
-        if Emails.objects.filter(~Q(id=url_id), email=attrs['email']).exists():
+        if Emails.objects.filter(contact_id=attrs['contact'], email=attrs['email']).exists():
             raise serializers.ValidationError(
                 f"Contact with the email {attrs['email']} already exists."
             )
 
-        if Emails.objects.filter(~Q(id=url_id), contact=attrs['contact'],
+        if Emails.objects.filter(contact=attrs['contact'],
                                  email_type=attrs['email_type']).exists():
             raise serializers.ValidationError(
                 'Contact already has an email with this type.'
