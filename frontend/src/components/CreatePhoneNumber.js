@@ -23,8 +23,8 @@ export default class CreatePhoneNumber extends React.Component {
     this.state = {
       contactID: props.contactID,
       open: false,
-      phonenumber_type: '',
-      phoneNumber: ''
+      type: '',
+      data: ''
     }
   }
 
@@ -38,13 +38,13 @@ export default class CreatePhoneNumber extends React.Component {
     e.preventDefault()
     api.post('/contacts/phone-number', {
       contact: this.state.contactID,
-      phonenumber_type: this.state.phonenumber_type,
-      phoneNumber: this.state.phoneNumber
+      type: this.state.type,
+      data: this.state.data
     })
     .then((res) => {
       if (res.status === 201){
         this.props.callbackData(res.data.id)
-        this.setState({ open: false, phonenumber_type: '', phoneNumber: '' })
+        this.setState({ open: false, type: '', data: '' })
       } else {
         // handle error
         console.log(res)
@@ -90,9 +90,9 @@ export default class CreatePhoneNumber extends React.Component {
                     <Select
                       labelId="demo-simple-select-label"
                       id="demo-simple-select"
-                      value={this.state.phonenumber_type}
+                      value={this.state.type}
                       label="Phone Number Type"
-                      onChange={(e) => this.setState({phonenumber_type: e.target.value})}
+                      onChange={(e) => this.setState({type: e.target.value})}
                     >
                       <MenuItem value="mob">Mobile</MenuItem>
                       <MenuItem value="home">Home</MenuItem>
@@ -107,7 +107,7 @@ export default class CreatePhoneNumber extends React.Component {
                     label="Phone Number"
                     name="phoneNumber"
                     autoFocus
-                    onChange={(e) => this.setState({phoneNumber: e.target.value})}
+                    onChange={(e) => this.setState({data: e.target.value})}
                   />
                   <DialogActions sx={{ mt: 5 }}>
                     <Button onClick={this.handleToggle} variant="contained" color="error">Cancel</Button>
