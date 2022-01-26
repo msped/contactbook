@@ -30,6 +30,9 @@ export default function Header() {
                     <Button color="inherit" href="/login">
                         Login
                     </Button>
+                    <Button color="inherit" href="/logout">
+                        Logout
+                    </Button>
                 </Toolbar>
             </AppBar>
         </Box>
